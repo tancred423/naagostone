@@ -29,13 +29,13 @@ export abstract class PageParser {
     const classJobDataAll = await axios
       .get(`${url}/class_job`)
       .catch((err: any) => {
-        console.log(err.response)
-        throw new Error(err.response.status)
+        // console.log(err.response)
+        // throw new Error(err.response.status)
       })
 
-    const classJobData = classJobDataAll.data
-    const classJobDom = parseHTML(classJobData)
-    let classJobDocument = classJobDom.window.document
+    const classJobData = classJobDataAll?.data
+    const classJobDom = classJobDataAll ? parseHTML(classJobData) : undefined
+    let classJobDocument = classJobDom?.window.document
 
     // Get achievements document
     const achievementsDataAll = await axios
@@ -52,21 +52,21 @@ export abstract class PageParser {
 
     // Get mounts document
     const mountsDataAll = await axios.get(`${url}/mount`).catch((err: any) => {
-      throw new Error(err.response.status)
+      // throw new Error(err.response.status)
     })
-    const mountsData = mountsDataAll.data
-    const mountsDom = parseHTML(mountsData)
-    let mountsDocument = mountsDom.window.document
+    const mountsData = mountsDataAll?.data
+    const mountsDom = mountsDataAll ? parseHTML(mountsData) : undefined
+    let mountsDocument = mountsDom?.window.document
 
     // Get minions document
     const minionsDataAll = await axios
       .get(`${url}/minion`)
       .catch((err: any) => {
-        throw new Error(err.response.status)
+        // throw new Error(err.response.status)
       })
-    const minionsData = minionsDataAll.data
-    const minionsDom = parseHTML(minionsData)
-    let minionsDocument = minionsDom.window.document
+    const minionsData = minionsDataAll?.data
+    const minionsDom = minionsDataAll ? parseHTML(minionsData) : undefined
+    let minionsDocument = minionsDom?.window.document
 
     // Columns
     const columnsQuery = req.query && req.query['columns']
@@ -143,7 +143,8 @@ export abstract class PageParser {
           'reaper'
         ].includes(column)
       ) {
-        correctDocument = classJobDocument
+        if (classJobDocument) correctDocument = classJobDocument
+        else correctDocument = document
       } else if (['started', 'ap', 'amount_achievements'].includes(column)) {
         if (achievementsDocument) correctDocument = achievementsDocument
         else {
@@ -155,11 +156,12 @@ export abstract class PageParser {
           }
         }
       } else if (column === 'amount_mounts') {
-        correctDocument = mountsDocument
+        if (mountsDocument) correctDocument = mountsDocument
+        else correctDocument = document
       } else if (column === 'amount_minions') {
-        correctDocument = minionsDocument
+        if (minionsDocument) correctDocument = minionsDocument
+        else correctDocument = document
       } else correctDocument = document
-
       const parsed = this.handleColumn(definition, correctDocument)
       if (parsed.isPatch || column === 'Entry') {
         return {

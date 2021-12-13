@@ -1,42 +1,52 @@
 {
   "MAINHAND": {
     "NAME": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "regex": "(?P<name>.*)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--0 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -47,40 +57,49 @@
     "NAME": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--1 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -91,40 +110,49 @@
     "NAME": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--2 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -135,40 +163,49 @@
     "NAME": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--3 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -179,87 +216,52 @@
     "NAME": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--4 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
-      "regex": "Item Level (?P<item_level>\\d*)"
-    }
-  },
-  "WAIST": {
-    "NAME": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
-    },
-    "DB_LINK": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
-    },
-    "MIRAGE_NAME": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
-    },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
-    },
-    "STAIN": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
-    },
-    "MATERIA_1": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
-    },
-    "MATERIA_2": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
-    },
-    "MATERIA_3": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
-    },
-    "MATERIA_4": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
-    },
-    "MATERIA_5": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
-    },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
-    },
-    "ITEM_LEVEL": {
-      "selector": ".icon-c--5 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
       "regex": "Item Level (?P<item_level>\\d*)"
     }
   },
@@ -267,40 +269,49 @@
     "NAME": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--6 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
     },
-    "STAIN": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -311,40 +322,49 @@
     "NAME": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--7 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -355,40 +375,49 @@
     "NAME": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--8 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -399,40 +428,49 @@
     "NAME": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--9 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -443,40 +481,49 @@
     "NAME": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--10 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -487,40 +534,49 @@
     "NAME": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--11 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -531,40 +587,49 @@
     "NAME": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
     },
-    "DB_LINK": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+    "ICON": {
+      "selector": ".icon-c--12 > img.character__item_icon__img",
+      "attribute": "src"
     },
     "MIRAGE_NAME": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2)",
+      "regex": "(?P<mirage_name>.*)<a.*"
     },
-    "MIRAGE_DB_LINK": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3) > p:nth-child(2) > a:nth-child(1)"
+    "RARITY": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)",
+      "attribute": "class",
+      "regex": ".*txt-rarity_(?P<rarity>.*)"
     },
-    "STAIN": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    "COLOR_CODE": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)",
+      "attribute": "style",
+      "regex": "background-color: (?P<color_code>.*);"
+    },
+    "COLOR_NAME": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain > a:nth-child(1)"
     },
     "MATERIA_1": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(1) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
+      "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
     "MATERIA_2": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(2) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
+      "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
     },
     "MATERIA_3": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(3) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
+      "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
     "MATERIA_4": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(4) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
+      "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
     "MATERIA_5": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul:nth-child(7) > li:nth-child(5) > div:nth-child(2)",
-      "regex": "(?P<Name>.*)<br/>"
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
+      "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
     },
-    "CREATOR_NAME": {
-      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(7) > div:nth-child(1) > a:nth-child(1)"
+    "TYPE": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
     },
     "ITEM_LEVEL": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(3)",
@@ -574,6 +639,13 @@
   "SOULCRYSTAL": {
     "NAME": {
       "selector": ".icon-c--13 > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(2)"
+    },
+    "ICON": {
+      "selector": ".icon-c--13 > img.character__item_icon__img",
+      "attribute": "src"
+    },
+    "TYPE": {
+      "selector": ".icon-c--13 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(3)"
     }
   }
 }
