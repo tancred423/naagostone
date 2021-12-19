@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { PageParser } from '../core/maintenance-parser'
+import { PageParser } from '../core/lodestone-parser'
 import * as maintenanceDetails from '../lib/lodestone-css-selectors/lodestone/maintenance_details.json'
 import { CssSelectorRegistry } from '../core/css-selector-registry'
 

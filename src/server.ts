@@ -1,15 +1,16 @@
 import express from 'express'
+import { Topics } from './profile/topics'
 import { Maintenance } from './profile/maintenance'
 import { Character } from './profile/character'
 import { ItemLevel } from './profile/itemLevel'
 import { CharacterSearch } from './search/character-search'
-import { parse } from 'path/posix'
 import { MaintenanceDetails } from './profile/maintenanceDetails'
 
 const app = express()
 
 const characterParser = new Character()
 const characterSearch = new CharacterSearch()
+const topicsParser = new Topics()
 const maintenanceParser = new Maintenance()
 const maintenanceDetailsParser = new MaintenanceDetails()
 
@@ -95,7 +96,40 @@ app.get('/lodestone/maintenance', async (req, res) => {
   }
 })
 
-const port = process.env.PORT || 8080
+app.get('/lodestone/topics', async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  if ((req.query['columns'] as string)?.indexOf('Bio') > -1) {
+    res.set('Cache-Control', 'max-age=3600')
+  }
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200)
+  }
+  try {
+    const topics = await topicsParser.parse(req)
+    const parsed: any = {
+      Topics: {
+        ...topics
+      }
+    }
+
+    for (var key in parsed.Topics)
+      if (parsed.Topics[key].link)
+        parsed.Topics[key].link =
+          'https://eu.finalfantasyxiv.com' + parsed.Topics[key].link
+
+    const resArray = []
+    for (var key in parsed.Topics) resArray.push(parsed.Topics[key])
+
+    parsed.Topics = resArray
+
+    return res.status(200).send(parsed)
+  } catch (err: any) {
+    if (err.message === '404') return res.sendStatus(404)
+    else return res.status(500).send(err)
+  }
+})
+
+const port = 8081
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`)
 })
