@@ -10,7 +10,7 @@ export class Achievements extends PaginatedPageParser {
 
   protected getBaseURL(req: Request): string {
     return (
-      'https://na.finalfantasyxiv.com/lodestone/character/' +
+      'https://eu.finalfantasyxiv.com/lodestone/character/' +
       req.params.characterId +
       '/achievement?order=2'
     )

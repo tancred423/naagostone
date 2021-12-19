@@ -9,7 +9,7 @@ import { CssSelectorRegistry } from '../core/css-selector-registry'
 export class Character extends PageParser {
   protected getURL(req: Request): string {
     return (
-      'https://na.finalfantasyxiv.com/lodestone/character/' +
+      'https://eu.finalfantasyxiv.com/lodestone/character/' +
       req.params.characterId
     )
   }

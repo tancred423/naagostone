@@ -15,8 +15,12 @@ export abstract class PageParser {
 
   protected abstract getCSSSelectors(): CssSelectorRegistry
 
-  public async parse(req: Request, columnsPrefix = ''): Promise<Object> {
-    const url = this.getURL(req)
+  public async parse(
+    req: Request,
+    columnsPrefix = '',
+    customUrl = undefined
+  ): Promise<Object> {
+    const url = customUrl ? customUrl : this.getURL(req)
 
     // Get profile document
     const { data } = await axios.get(url).catch((err: any) => {
@@ -24,42 +28,6 @@ export abstract class PageParser {
     })
     const dom = parseHTML(data)
     let { document } = dom.window
-
-    // Get classJob document
-    const classJobDataAll = await axios
-      .get(`${url}/class_job`)
-      .catch((err: any) => {})
-
-    const classJobData = classJobDataAll?.data
-    const classJobDom = classJobDataAll ? parseHTML(classJobData) : undefined
-    let classJobDocument = classJobDom?.window.document
-
-    // Get achievements document
-    const achievementsDataAll = await axios
-      .get(`${url}/achievement/?order=2`)
-      .catch((err: any) => {})
-
-    const achievementsData = achievementsDataAll?.data
-    const achievementsDom = achievementsDataAll
-      ? parseHTML(achievementsData)
-      : undefined
-    let achievementsDocument = achievementsDom?.window.document
-
-    // Get mounts document
-    const mountsDataAll = await axios
-      .get(`${url}/mount`)
-      .catch((err: any) => {})
-    const mountsData = mountsDataAll?.data
-    const mountsDom = mountsDataAll ? parseHTML(mountsData) : undefined
-    let mountsDocument = mountsDom?.window.document
-
-    // Get minions document
-    const minionsDataAll = await axios
-      .get(`${url}/minion`)
-      .catch((err: any) => {})
-    const minionsData = minionsDataAll?.data
-    const minionsDom = minionsDataAll ? parseHTML(minionsData) : undefined
-    let minionsDocument = minionsDom?.window.document
 
     // Columns
     const columnsQuery = req.query && req.query['columns']
@@ -98,64 +66,7 @@ export abstract class PageParser {
         }
       }
 
-      let correctDocument = document
-      if (
-        [
-          'bozja',
-          'eureka',
-          'paladin',
-          'warrior',
-          'darkknight',
-          'gunbreaker',
-          'monk',
-          'dragoon',
-          'ninja',
-          'samurai',
-          'whitemage',
-          'scholar',
-          'astrologian',
-          'bard',
-          'machinist',
-          'dancer',
-          'blackmage',
-          'summoner',
-          'redmage',
-          'bluemage',
-          'carpenter',
-          'blacksmith',
-          'armorer',
-          'goldsmith',
-          'leatherworker',
-          'weaver',
-          'alchemist',
-          'culinarian',
-          'miner',
-          'botanist',
-          'fisher',
-          'sage',
-          'reaper'
-        ].includes(column)
-      ) {
-        if (classJobDocument) correctDocument = classJobDocument
-        else correctDocument = document
-      } else if (['started', 'ap', 'amount_achievements'].includes(column)) {
-        if (achievementsDocument) correctDocument = achievementsDocument
-        else {
-          return {
-            ...acc,
-            started: 'Private',
-            ap: 'Private',
-            amount_achievements: 'Private'
-          }
-        }
-      } else if (column === 'amount_mounts') {
-        if (mountsDocument) correctDocument = mountsDocument
-        else correctDocument = document
-      } else if (column === 'amount_minions') {
-        if (minionsDocument) correctDocument = minionsDocument
-        else correctDocument = document
-      } else correctDocument = document
-      const parsed = this.handleColumn(definition, correctDocument)
+      const parsed = this.handleColumn(definition, document)
       if (parsed.isPatch || column === 'Entry') {
         return {
           ...acc,
