@@ -99,8 +99,16 @@
     "NAME": {
       "selector": ".character__freecompany__name > h4:nth-child(2) > a:nth-child(1)"
     },
-    "ICON": {
+    "ICON_LAYER_0": {
+      "selector": ".character__freecompany__crest > div:nth-child(1) > img:nth-child(1)",
+      "attribute": "src"
+    },
+    "ICON_LAYER_1": {
       "selector": ".character__freecompany__crest > div:nth-child(1) > img:nth-child(2)",
+      "attribute": "src"
+    },
+    "ICON_LAYER_2": {
+      "selector": ".character__freecompany__crest > div:nth-child(1) > img:nth-child(3)",
       "attribute": "src"
     }
   },
