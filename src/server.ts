@@ -57,8 +57,8 @@ app.get('/character/:characterId', async (req, res) => {
     const parsed: any = {
       Character: {
         ID: +req.params.characterId,
-        ...character
-      }
+        ...character,
+      },
     }
 
     parsed.Character.item_level = ItemLevel.getAverageItemLevel(parsed)
@@ -81,8 +81,8 @@ app.get('/lodestone/topics', async (req, res) => {
     const topics = await topicsParser.parse(req)
     const parsed: any = {
       Topics: {
-        ...topics
-      }
+        ...topics,
+      },
     }
 
     for (var key in parsed.Topics)
@@ -117,8 +117,8 @@ app.get('/lodestone/notices', async (req, res) => {
 
     const parsed: any = {
       Notices: {
-        ...noticesFiltered
-      }
+        ...noticesFiltered,
+      },
     }
 
     for (var key in parsed.Notices)
@@ -159,8 +159,8 @@ app.get('/lodestone/maintenance', async (req, res) => {
     const maintenances = await maintenanceParser.parse(req)
     const parsed: any = {
       Maintenances: {
-        ...maintenances
-      }
+        ...maintenances,
+      },
     }
 
     for (var key in parsed.Maintenances)
@@ -202,8 +202,8 @@ app.get('/lodestone/updates', async (req, res) => {
     const updates = await updatesParser.parse(req)
     const parsed: any = {
       Updates: {
-        ...updates
-      }
+        ...updates,
+      },
     }
 
     for (var key in parsed.Updates)
@@ -244,8 +244,8 @@ app.get('/lodestone/status', async (req, res) => {
     const status = await statusParser.parse(req)
     const parsed: any = {
       Status: {
-        ...status
-      }
+        ...status,
+      },
     }
 
     for (var key in parsed.Status)
@@ -275,7 +275,7 @@ app.get('/lodestone/status', async (req, res) => {
   }
 })
 
-const port = 8081
+const port = 3001
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`)
 })
