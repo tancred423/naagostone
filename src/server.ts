@@ -147,52 +147,52 @@ function countDyeSlots(parsed: any) {
       = (parsed.Character.offhand.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.head.amount_dye_slots) {
+  if (parsed.Character.head?.amount_dye_slots) {
     parsed.Character.head.amount_dye_slots
       = (parsed.Character.head.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.body.amount_dye_slots) {
+  if (parsed.Character.body?.amount_dye_slots) {
     parsed.Character.body.amount_dye_slots
       = (parsed.Character.body.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.hands.amount_dye_slots) {
+  if (parsed.Character.hands?.amount_dye_slots) {
     parsed.Character.hands.amount_dye_slots
       = (parsed.Character.hands.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.legs.amount_dye_slots) {
+  if (parsed.Character.legs?.amount_dye_slots) {
     parsed.Character.legs.amount_dye_slots
       = (parsed.Character.legs.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.feet.amount_dye_slots) {
+  if (parsed.Character.feet?.amount_dye_slots) {
     parsed.Character.feet.amount_dye_slots
       = (parsed.Character.feet.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.earrings.amount_dye_slots) {
+  if (parsed.Character.earrings?.amount_dye_slots) {
     parsed.Character.earrings.amount_dye_slots
       = (parsed.Character.earrings.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.necklace.amount_dye_slots) {
+  if (parsed.Character.necklace?.amount_dye_slots) {
     parsed.Character.necklace.amount_dye_slots
       = (parsed.Character.necklace.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.bracelets.amount_dye_slots) {
+  if (parsed.Character.bracelets?.amount_dye_slots) {
     parsed.Character.bracelets.amount_dye_slots
       = (parsed.Character.bracelets.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.ring1.amount_dye_slots) {
+  if (parsed.Character.ring1?.amount_dye_slots) {
     parsed.Character.ring1.amount_dye_slots
       = (parsed.Character.ring1.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
 
-  if (parsed.Character.ring2.amount_dye_slots) {
+  if (parsed.Character.ring2?.amount_dye_slots) {
     parsed.Character.ring2.amount_dye_slots
       = (parsed.Character.ring2.amount_dye_slots.split('<img')[0].match(/staining/g) || []).length
   }
