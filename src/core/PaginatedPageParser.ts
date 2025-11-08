@@ -26,7 +26,7 @@ export abstract class PaginatedPageParser extends PageParser {
     try {
       const queryName = ctx.req.query("name")?.toString().toLowerCase();
       if (queryName) {
-        baseParse.List = (baseParse.List as Array<Record<string, unknown>>)
+        baseParse.list = (baseParse.list as Array<Record<string, unknown>>)
           .filter((parses) => {
             const parseName = (parses.name as string)?.toLowerCase();
             return parseName === queryName;
@@ -35,9 +35,9 @@ export abstract class PaginatedPageParser extends PageParser {
 
       const queryWorld = ctx.req.query("worldname")?.toString().toLowerCase();
       if (queryWorld) {
-        baseParse.List = (baseParse.List as Array<Record<string, unknown>>)
+        baseParse.list = (baseParse.list as Array<Record<string, unknown>>)
           .filter((parses) => {
-            const parseWorld = (parses.World as string)?.toLowerCase();
+            const parseWorld = (parses.world as string)?.toLowerCase();
             return parseWorld === queryWorld;
           });
       }
@@ -45,17 +45,17 @@ export abstract class PaginatedPageParser extends PageParser {
       console.log(err);
     }
 
-    delete baseParse.ListNextButton;
-    const currentPage = baseParse.CurrentPage as number;
-    const numPages = baseParse.NumPages as number;
-    baseParse.Pagination = {
-      Page: +currentPage,
-      PageTotal: +numPages,
-      PageNext: +currentPage < +numPages ? +currentPage + 1 : null,
-      PagePrev: +currentPage < 1 ? null : +currentPage - 1,
+    delete baseParse.list_next_button;
+    const currentPage = baseParse.current_page as number;
+    const numPages = baseParse.num_pages as number;
+    baseParse.pagination = {
+      page: +currentPage,
+      page_total: +numPages,
+      page_next: +currentPage < +numPages ? +currentPage + 1 : null,
+      page_prev: +currentPage < 1 ? null : +currentPage - 1,
     };
-    delete baseParse.CurrentPage;
-    delete baseParse.NumPages;
+    delete baseParse.current_page;
+    delete baseParse.num_pages;
     return baseParse;
   }
 }

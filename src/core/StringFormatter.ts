@@ -1,8 +1,8 @@
 export class StringFormatter {
   static snakeCase(str: string): string {
     return str
-      .replace(/([A-Z])/g, "_$1")
-      .toLowerCase()
-      .replace(/^_/, "");
+      .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+      .replace(/([A-Z])([A-Z][a-z])/g, "$1_$2")
+      .toLowerCase();
   }
 }

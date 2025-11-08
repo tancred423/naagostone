@@ -292,7 +292,7 @@ export abstract class PageParser {
           Object.entries<string>(match.groups as Record<string, string>).reduce(
             (acc, [key, value]) => ({
               ...acc,
-              [key]: isNaN(+value) ? value : +value,
+              [StringFormatter.snakeCase(key)]: isNaN(+value) ? value : +value,
             }),
             {},
           ) || null
@@ -323,7 +323,7 @@ export abstract class PageParser {
       return null;
     }
     return {
-      List: (mainList as unknown as string[])
+      list: (mainList as unknown as string[])
         .map((element: string) => {
           const miniDOM = domParser.parseFromString(element, "text/html");
           return this.handleColumn(definitions, miniDOM as unknown as Document)
