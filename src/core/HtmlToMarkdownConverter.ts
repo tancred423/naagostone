@@ -556,4 +556,158 @@ export class HtmlToMarkdownConverter {
 
     return markdown.substring(0, cutLength).trimEnd() + suffix;
   }
+
+  /**
+   * Extract start and end timestamps from maintenance description HTML
+   * Returns an object with start_timestamp and end_timestamp (or null if not found)
+   */
+  extractMaintenanceTimestamps(
+    html: string,
+  ): { start_timestamp: number | null; end_timestamp: number | null } {
+    const result = {
+      start_timestamp: null as number | null,
+      end_timestamp: null as number | null,
+    };
+
+    // Convert HTML to plain text (rough conversion)
+    let text = html.replace(/<br\s*\/?>/gi, "\n");
+    text = text.replace(/<[^>]+>/g, " ");
+    text = text.replace(/&nbsp;/g, " ");
+    text = text.replace(/\s+/g, " ");
+
+    // Remove erroneous am/pm markers (24-hour format with am/pm is an error)
+    text = text.replace(/(\d{1,2}:\d{2})\s+(am|pm)/gi, "$1");
+
+    // Try multiple patterns to extract timestamps
+
+    // Pattern 1: Date with time range "to" with optional "From" prefix
+    // Example: "From Nov. 4, 2025 7:00 to 8:00 (GMT)" or "Oct. 1, 2025 02:06 to 02:55 (GMT)"
+    let match = text.match(
+      /(?:From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const startTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[4],
+        match[5],
+      );
+      let endTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[6],
+        match[7],
+      );
+
+      if (startTimestamp && endTimestamp) {
+        // If end time is before start time, it's the next day
+        if (endTimestamp <= startTimestamp) {
+          endTimestamp += 86400; // Add 24 hours
+        }
+        result.start_timestamp = startTimestamp;
+        result.end_timestamp = endTimestamp;
+        return result;
+      }
+    }
+
+    // Pattern 2: Weekday with time range using "until"
+    // Example: "Thursday, 6 November 2025 at 8:00 (GMT) until Thursday, 27 November 2025 at 14:59 (GMT)"
+    match = text.match(
+      /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\).*?until.*?(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const startTimestamp = this.parseDateTimeToTimestamp(
+        match[1],
+        match[2],
+        match[3],
+        match[4],
+        match[5],
+      );
+      const endTimestamp = this.parseDateTimeToTimestamp(
+        match[6],
+        match[7],
+        match[8],
+        match[9],
+        match[10],
+      );
+
+      if (startTimestamp && endTimestamp) {
+        result.start_timestamp = startTimestamp;
+        result.end_timestamp = endTimestamp;
+        return result;
+      }
+    }
+
+    // Pattern 3: Date with time range "between...and"
+    // Example: "Nov. 4, 2025 between 4:00 and 11:00 (GMT)"
+    match = text.match(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+between\s+(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const startTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[4],
+        match[5],
+      );
+      const endTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[6],
+        match[7],
+      );
+
+      if (startTimestamp && endTimestamp) {
+        result.start_timestamp = startTimestamp;
+        result.end_timestamp = endTimestamp;
+        return result;
+      }
+    }
+
+    // Pattern 4: Full date with weekday and single time (no end time, just a start time)
+    // Example: "Friday, 31 October 2025 at 11:00 (GMT)"
+    match = text.match(
+      /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const timestamp = this.parseDateTimeToTimestamp(
+        match[1],
+        match[2],
+        match[3] || new Date().getFullYear().toString(),
+        match[4],
+        match[5],
+      );
+      if (timestamp) {
+        result.start_timestamp = timestamp;
+        // For single timestamp, we don't set end_timestamp
+        return result;
+      }
+    }
+
+    // Pattern 5: Date with single time (no weekday, no end time)
+    // Example: "Nov. 4, 2025 at 4:00 (GMT)"
+    match = text.match(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const timestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[4],
+        match[5],
+      );
+      if (timestamp) {
+        result.start_timestamp = timestamp;
+        // For single timestamp, we don't set end_timestamp
+        return result;
+      }
+    }
+
+    return result;
+  }
 }

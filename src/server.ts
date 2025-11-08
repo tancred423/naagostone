@@ -640,6 +640,17 @@ app.get("/lodestone/maintenances", async (context: Context) => {
       (maintenance, index: number) => {
         if (maintenance) {
           Object.assign(maintenance, detailsResults[index]);
+
+          if (
+            maintenance.description &&
+            typeof maintenance.description === "string"
+          ) {
+            const timestamps = markdownConverter.extractMaintenanceTimestamps(
+              maintenance.description,
+            );
+            maintenance.start_timestamp = timestamps.start_timestamp;
+            maintenance.end_timestamp = timestamps.end_timestamp;
+          }
         }
       },
     );
