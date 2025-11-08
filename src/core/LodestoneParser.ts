@@ -183,7 +183,9 @@ export abstract class LodestoneParser {
           Object.entries<string>(match.groups as Record<string, string>).reduce(
             (acc, [key, value]) => ({
               ...acc,
-              [StringFormatter.snakeCase(key)]: isNaN(+value) ? value : +value,
+              [StringFormatter.snakeCase(key)]: value !== undefined
+                ? (isNaN(+value) ? value : +value)
+                : null,
             }),
             {},
           ) || null

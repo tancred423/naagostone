@@ -1,141 +1,141 @@
 {
   "1": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(1) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "2": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(2) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "3": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(3) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "4": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(4) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "5": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(5) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "6": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(6) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(6) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(6) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(6) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(6) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(6) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "7": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(7) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(7) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(7) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(7) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(7) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(7) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "8": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(8) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(8) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(8) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(8) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(8) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(8) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "9": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(9) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(9) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(9) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(9) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(9) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(9) > a:nth-child(1)",
       "attribute": "href"
     }
   },
   "10": {
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(10) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(10) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(10) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(10) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul:nth-child(1) > li:nth-child(10) > a:nth-child(1)",
+      "selector": "#toptabchanger_newsarea > div:nth-child(3) > ul > li:nth-child(10) > a:nth-child(1)",
       "attribute": "href"
     }
   }

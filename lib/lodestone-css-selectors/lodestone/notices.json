@@ -2,10 +2,7 @@
   "1": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -19,10 +16,7 @@
   "2": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -36,10 +30,7 @@
   "3": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -53,10 +44,7 @@
   "4": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -70,10 +58,7 @@
   "5": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -87,10 +72,7 @@
   "6": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -104,10 +86,7 @@
   "7": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -121,10 +100,7 @@
   "8": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -138,10 +114,7 @@
   "9": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
@@ -155,10 +128,7 @@
   "10": {
     "TITLE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "<span.*>(?P<tag>.*)</span>(?P<title>.*)"
-    },
-    "TITLE_FULL": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)"
+      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
       "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",

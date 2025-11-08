@@ -89,27 +89,27 @@ app.get("/", (context: Context) => {
         topics: {
           method: "GET",
           path: "/lodestone/topics",
-          description: "Get Lodestone topics",
+          description: "Get topics with details",
         },
         notices: {
           method: "GET",
           path: "/lodestone/notices",
-          description: "Get Lodestone notices with details",
+          description: "Get notices with details",
         },
         maintenance: {
           method: "GET",
-          path: "/lodestone/maintenance",
-          description: "Get maintenance information with details",
+          path: "/lodestone/maintenances",
+          description: "Get maintenances with details",
         },
         updates: {
           method: "GET",
           path: "/lodestone/updates",
-          description: "Get game updates with details",
+          description: "Get updates with details",
         },
         status: {
           method: "GET",
-          path: "/lodestone/status",
-          description: "Get server status with details",
+          path: "/lodestone/statuses",
+          description: "Get statuses with details",
         },
       },
     },
@@ -591,7 +591,7 @@ app.get("/lodestone/notices", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/maintenance", async (context: Context) => {
+app.get("/lodestone/maintenances", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -709,7 +709,7 @@ app.get("/lodestone/updates", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/status", async (context: Context) => {
+app.get("/lodestone/statuses", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -764,7 +764,7 @@ app.get("/lodestone/status", async (context: Context) => {
   }
 });
 
-const port = parseInt(Deno.env.get("PORT") || "3001");
+const port = parseInt(Deno.env.get("PORT") || "3002");
 const hostname = Deno.env.get("SERVER_HOST") || "127.0.0.1";
 
 log.debug(`Attempting to bind to hostname: ${hostname}, port: ${port}`);
