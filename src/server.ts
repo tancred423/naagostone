@@ -764,7 +764,7 @@ app.get("/lodestone/statuses", async (context: Context) => {
   }
 });
 
-const port = parseInt(Deno.env.get("PORT") || "3002");
+const port = parseInt(Deno.env.get("PORT") || "3001");
 const hostname = Deno.env.get("SERVER_HOST") || "127.0.0.1";
 
 log.debug(`Attempting to bind to hostname: ${hostname}, port: ${port}`);
