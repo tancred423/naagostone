@@ -179,6 +179,25 @@ export class HtmlToMarkdownConverter {
       },
     );
 
+    // Pattern 0b2: Multiple timezone lines with "from" keyword (open-ended time)
+    // Example: "Nov. 11, 2025 from 10:00 (GMT)  \nNov. 11, 2025 from 21:00 (AEDT)"
+    markdown = markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+from\s+\d{1,2}:\d{2}\s+\([A-Z]{3,4}\)){1,}/gi,
+      (match, month, day, year, hour, minute) => {
+        const timestamp = this.parseDateTimeToTimestamp(
+          day,
+          month,
+          year,
+          hour,
+          minute,
+        );
+        if (timestamp) {
+          return `From <t:${timestamp}:f>`;
+        }
+        return match;
+      },
+    );
+
     // Pattern 0c: Inline multiple timezone times with "/" separator (consolidate to single timestamp)
     // Example: "Oct. 7, 2025 10:00 (GMT) / Oct. 7, 2025 11:00 (BST) / Oct. 7, 2025 21:00 (AEDT)"
     markdown = markdown.replace(
@@ -709,6 +728,26 @@ export class HtmlToMarkdownConverter {
       if (timestamp) {
         result.start_timestamp = timestamp;
         // For single timestamp, we don't set end_timestamp
+        return result;
+      }
+    }
+
+    // Pattern 6: Date with "from" keyword (open-ended time)
+    // Example: "Nov. 11, 2025 from 10:00 (GMT)"
+    match = text.match(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const timestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[4],
+        match[5],
+      );
+      if (timestamp) {
+        result.start_timestamp = timestamp;
+        // For "from" patterns, we don't set end_timestamp
         return result;
       }
     }
