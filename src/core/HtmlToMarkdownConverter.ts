@@ -60,6 +60,7 @@ export class HtmlToMarkdownConverter {
     markdown = markdown.replace(/\s*\n\s*\n\s*/g, "\n\n");
     markdown = markdown.replace(/(\n\s*){3,}/g, "\n\n");
     markdown = markdown.replace(/^・/gm, "* ");
+    markdown = markdown.replace(/^■\s*/gm, "* ");
     markdown = markdown.replace(/\n・/g, "\n* ");
     markdown = this.replaceImagesWithCounts(markdown);
     markdown = this.convertTitlesToDiscordFormat(markdown);
