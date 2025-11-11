@@ -64,6 +64,32 @@ export class HtmlToMarkdownConverter {
     markdown = markdown.replace(/\n・/g, "\n* ");
     markdown = this.replaceImagesWithCounts(markdown);
     markdown = this.convertTitlesToDiscordFormat(markdown);
+    markdown = this.wrapSpecialUrlsInBackticks(markdown);
+
+    return markdown;
+  }
+
+  private wrapSpecialUrlsInBackticks(markdown: string): string {
+    // Wrap URLs containing box characters (■) or punycode (xn--) in backticks
+    // This prevents Discord from auto-converting them and keeps them as literal text
+
+    // Pattern 1: Standalone URLs (not in markdown links) containing box or punycode
+    markdown = markdown.replace(
+      /(?<!`)(https?:\/\/[^\s\)]+(?:■|xn--)[^\s\)]*)/g,
+      (_match: string, url: string) => {
+        // Only wrap if not already in backticks
+        return `\`${url}\``;
+      },
+    );
+
+    // Pattern 2: Markdown links [text](url) where url contains box or punycode
+    markdown = markdown.replace(
+      /\[([^\]]+)\]\(([^)]+(?:■|xn--)[^)]*)\)/g,
+      (_match: string, text: string, url: string) => {
+        // Replace the markdown link with plain text: text + backtick url
+        return `${text} \`${url}\``;
+      },
+    );
 
     return markdown;
   }
