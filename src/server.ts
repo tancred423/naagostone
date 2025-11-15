@@ -581,32 +581,46 @@ app.get("/lodestone/notices", async (context: Context) => {
       Object.entries(notices).filter(([_, v]) => v !== null),
     );
 
+    // Extract special notices and regular notices from the parsed result
+    const specialNotices = (noticesFiltered.special_notices as { list?: Array<Record<string, unknown>> })?.list || [];
+    const allRegularNotices = (noticesFiltered.regular_notices as { list?: Array<Record<string, unknown>> })?.list ||
+      [];
+
+    // Take first 10 regular notices (they're already in chronological order on the page)
+    const regularNotices = allRegularNotices.slice(0, 10);
+
+    // Merge all notices into one array
+    const allNotices = [...specialNotices, ...regularNotices];
+
+    // Filter out null entries and add full URLs to links
+    const processedNotices = allNotices
+      .filter((notice) => notice !== null)
+      .map((notice) => {
+        if (notice?.link && typeof notice.link === "string") {
+          notice.link = "https://eu.finalfantasyxiv.com" + notice.link;
+        }
+        return notice;
+      });
+
+    // Sort by date (timestamp) descending - newest first
+    processedNotices.sort((a, b) => {
+      const dateA = (a.date as number) || 0;
+      const dateB = (b.date as number) || 0;
+      return dateB - dateA;
+    });
+
+    // Take top 10 newest notices
+    const top10Notices = processedNotices.slice(0, 10);
+
     const parsed = {
-      notices: {
-        ...noticesFiltered,
-      },
+      notices: top10Notices,
     } as Record<string, unknown>;
 
-    for (const key in (parsed.notices as Record<string, unknown>)) {
-      const notice = (parsed.notices as Record<string, Record<string, unknown>>)[key];
-      if (notice?.link) {
-        notice.link = "https://eu.finalfantasyxiv.com" + notice.link;
-      }
-    }
-
-    const resArray = [];
-    for (const noticeKey in (parsed.notices as Record<string, unknown>)) {
-      const notice = (parsed.notices as Record<string, unknown>)[noticeKey];
-      if (notice) resArray.push(notice);
-    }
-
-    parsed.notices = resArray;
-
-    const detailsPromises = (parsed.notices as Array<Record<string, unknown>>)
+    const detailsPromises = top10Notices
       .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string));
     const detailsResults = await Promise.all(detailsPromises);
 
-    (parsed.notices as Array<Record<string, unknown>>).forEach(
+    top10Notices.forEach(
       (notice, index: number) => {
         Object.assign(notice, detailsResults[index]);
       },

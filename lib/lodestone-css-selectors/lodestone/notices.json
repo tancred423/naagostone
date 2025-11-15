@@ -1,141 +1,37 @@
 {
-  "1": {
+  "SPECIAL_NOTICES": {
+    "ROOT": {
+      "selector": ".news__content.news__content__bottom-radius > ul.parts__space--add > li.news__list",
+      "multiple": true
+    },
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "selector": "a.news__list--link > div.clearfix > p.news__list--title",
       "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "a.news__list--link > div.clearfix > time.news__list--time > script",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(1) > a:nth-child(1)",
+      "selector": "a.news__list--link",
       "attribute": "href"
     }
   },
-  "2": {
+  "REGULAR_NOTICES": {
+    "ROOT": {
+      "selector": ".news__content.news__content__bottom-radius > ul:not(.parts__space--add):not(.btn__pager) > li.news__list",
+      "multiple": true
+    },
     "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
+      "selector": "a.news__list--link > div.clearfix > p.news__list--title",
       "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
     },
     "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
+      "selector": "a.news__list--link > div.clearfix > time.news__list--time > script",
       "regex": ".*ldst_strftime\\((?P<date>\\d*)"
     },
     "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(2) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "3": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(3) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "4": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(4) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "5": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(1) > li:nth-child(5) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "6": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(1) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "7": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "8": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(3) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "9": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(4) > a:nth-child(1)",
-      "attribute": "href"
-    }
-  },
-  "10": {
-    "TITLE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > p:nth-child(1)",
-      "regex": "(?:<span.*>(?P<tag>.*)</span>)?(?P<title>.*)"
-    },
-    "DATE": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > div:nth-child(1) > time:nth-child(2) > script:nth-child(2)",
-      "regex": ".*ldst_strftime\\((?P<date>\\d*)"
-    },
-    "LINK": {
-      "selector": "#toptabchanger_newsarea > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1)",
+      "selector": "a.news__list--link",
       "attribute": "href"
     }
   }

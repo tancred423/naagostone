@@ -7,7 +7,7 @@ import type { CssSelectorRegistry } from "../../interface/CssSelectorRegistry.ts
 
 export class Notices extends LodestoneParser {
   protected getURL(_ctx: Context): string {
-    return "https://eu.finalfantasyxiv.com/lodestone/";
+    return "https://eu.finalfantasyxiv.com/lodestone/news/category/1";
   }
 
   protected getCSSSelectors(): CssSelectorRegistry {
