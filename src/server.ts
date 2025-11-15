@@ -106,8 +106,13 @@ app.use("/*", async (context: Context, next: () => Promise<void>) => {
 });
 
 app.get("/", (context: Context) => {
+  const deploymentHash = Deno.env.get("DEPLOYMENT_HASH") || "development";
+
   return context.json({
     name: "FFXIV Lodestone API",
+    deployment: {
+      hash: deploymentHash,
+    },
     endpoints: {
       character: {
         search: {

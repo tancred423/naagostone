@@ -1,6 +1,7 @@
 FROM denoland/deno:2.5.6
 
 ARG GIT_COMMIT_HASH=unknown
+ARG DEPLOYMENT_HASH=unknown
 
 WORKDIR /app
 
@@ -14,6 +15,7 @@ RUN deno cache src/server.ts
 EXPOSE 3001
 
 ENV SERVER_HOST=0.0.0.0
+ENV DEPLOYMENT_HASH=${DEPLOYMENT_HASH}
 
 LABEL org.opencontainers.image.source="https://github.com/tancred/naagostone"
 LABEL org.opencontainers.image.description="Naagostone - FFXIV Lodestone API"

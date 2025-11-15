@@ -51,6 +51,7 @@ jobs:
           push: true
           build-args: |
             GIT_COMMIT_HASH=${{ github.sha }}
+            DEPLOYMENT_HASH=${{ github.sha }}
           tags: |
             ghcr.io/${{ steps.repo_owner.outputs.owner }}/naagostone:latest
             ghcr.io/${{ steps.repo_owner.outputs.owner }}/naagostone:${{ github.sha }}
@@ -94,8 +95,8 @@ jobs:
             docker compose -f docker-compose.prod.yml down --volumes=false || true
             echo "Pulling latest images..."
             docker compose -f docker-compose.prod.yml pull
-            echo "Starting containers..."
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            echo "Starting containers with deployment hash..."
+            DEPLOYMENT_HASH=${{ github.sha }} docker compose -f docker-compose.prod.yml up -d --remove-orphans
             echo "Checking container status..."
             docker compose -f docker-compose.prod.yml ps
             echo "Cleaning up old images..."
