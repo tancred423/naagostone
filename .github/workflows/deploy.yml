@@ -79,16 +79,16 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ${{ vars.PROJECT_PATH }}
-            # Set the repository owner (lowercase) for docker-compose
             export GITHUB_REPOSITORY_OWNER=${{ steps.repo_owner.outputs.owner }}
-            # Stop containers but keep volumes (--volumes=false)
-            docker compose down --volumes=false
-            # Clean up any related dangling images without affecting other services
+            # Stop existing containers (keep volumes)
+            docker compose -f docker-compose.prod.yml down --volumes=false || true
+            # Clean up any dangling images for this repo
             docker image prune -f --filter "label=org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/naagostone"
-            # Pull the latest images
-            docker compose pull
-            # Start the containers
-            docker compose up -d --remove-orphans
+            # Pull latest images
+            docker compose -f docker-compose.prod.yml pull
+            # Start containers using the correct compose file
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
             # Show status
             echo "✅ Deployment complete!"
-            docker compose ps
+            docker compose -f docker-compose.prod.yml ps
+
