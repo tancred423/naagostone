@@ -19,5 +19,5 @@ LABEL org.opencontainers.image.source="https://github.com/tancred/naagostone"
 LABEL org.opencontainers.image.description="Naagostone - FFXIV Lodestone API"
 LABEL org.opencontainers.image.revision="${GIT_COMMIT_HASH}"
 
-CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-sys", "src/server.ts"]
+CMD ["deno", "run", "--allow-net", "--allow-env", "--allow-sys", "--allow-read", "src/server.ts"]
 

@@ -100,8 +100,4 @@ jobs:
             docker compose -f docker-compose.prod.yml ps
             echo "Cleaning up old images..."
             docker image prune -af --filter "until=24h" || true
-            # Show what image is actually running
-            echo "📦 Running image details:"
-            docker inspect naagostone-api --format='Image: {{.Config.Image}}' || true
-            docker inspect naagostone-api --format='Git commit: {{index .Config.Labels "org.opencontainers.image.revision"}}' || true
             echo "✅ Deployment completed successfully!"
