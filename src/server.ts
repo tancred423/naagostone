@@ -67,8 +67,6 @@ app.use("/*", async (context: Context, next: () => Promise<void>) => {
   const status = context.res.status;
   const isSuccess = status >= 200 && status < 300;
 
-  log.info(`isSuccess: ${isSuccess}, type: ${typeof isSuccess}`);
-
   if (!isSuccess) {
     let responseError: string | null = null;
     try {

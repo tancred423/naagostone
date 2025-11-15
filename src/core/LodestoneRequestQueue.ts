@@ -1,10 +1,12 @@
 import { type FetchOptions, HttpClient } from "./HttpClient.ts";
+import * as log from "@std/log";
 
 interface QueuedRequest {
   url: string;
   options: FetchOptions;
   resolve: (response: Response) => void;
   reject: (error: Error) => void;
+  queuedAt: number;
 }
 
 export class LodestoneRequestQueue {
@@ -27,6 +29,7 @@ export class LodestoneRequestQueue {
         options,
         resolve,
         reject,
+        queuedAt: Date.now(),
       });
 
       this.processQueue();
@@ -46,10 +49,21 @@ export class LodestoneRequestQueue {
         break;
       }
 
+      const queueWaitTime = Date.now() - request.queuedAt;
+
       // Ensure minimum delay between requests
       const timeSinceLastRequest = Date.now() - this.lastRequestTime;
+      let throttleDelay = 0;
       if (timeSinceLastRequest < this.delayBetweenRequests) {
-        await new Promise((resolve) => setTimeout(resolve, this.delayBetweenRequests - timeSinceLastRequest));
+        throttleDelay = this.delayBetweenRequests - timeSinceLastRequest;
+        await new Promise((resolve) => setTimeout(resolve, throttleDelay));
+      }
+
+      const totalDelay = queueWaitTime + throttleDelay;
+      if (totalDelay > 0) {
+        log.debug(
+          `Lodestone request queue delay: ${totalDelay}ms (queued: ${queueWaitTime}ms, throttled: ${throttleDelay}ms) for ${request.url}`,
+        );
       }
 
       try {
@@ -63,9 +77,10 @@ export class LodestoneRequestQueue {
           const retryAfter = response.headers.get("Retry-After");
           const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : this.delayBetweenRequests * 5;
 
+          log.warn(`Lodestone rate limited (429) for ${request.url}, waiting ${waitTime}ms before retry`);
           await new Promise((resolve) => setTimeout(resolve, waitTime));
 
-          // Retry the request
+          // Retry the request (preserve original queue time for accurate delay tracking)
           this.queue.unshift(request);
           this.lastRequestTime = Date.now();
           continue;
