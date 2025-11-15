@@ -60,6 +60,8 @@ app.use("/*", async (context: Context, next: () => Promise<void>) => {
   const status = context.res.status;
   const isSuccess = status >= 200 && status < 300;
 
+  log.info('isSuccess', isSuccess, typeof isSuccess)
+
   if (!isSuccess) {
     if (context.req.path === "/favicon.ico") {
       return;
