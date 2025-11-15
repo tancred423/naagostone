@@ -40,22 +40,17 @@ export abstract class PageParser {
       }),
     ]);
 
-    const classJobData =
-      classJobResponse.status === "fulfilled" && classJobResponse.value.ok
-        ? await classJobResponse.value.text()
-        : undefined;
-    const classJobDom = classJobData
-      ? domParser.parseFromString(classJobData, "text/html")
+    const classJobData = classJobResponse.status === "fulfilled" && classJobResponse.value.ok
+      ? await classJobResponse.value.text()
       : undefined;
+    const classJobDom = classJobData ? domParser.parseFromString(classJobData, "text/html") : undefined;
     const classJobDocument = classJobDom as unknown as Document | undefined;
 
     const achievementsData = achievementsResponse.status === "fulfilled" &&
         achievementsResponse.value.ok
       ? await achievementsResponse.value.text()
       : undefined;
-    const achievementsDom = achievementsData
-      ? domParser.parseFromString(achievementsData, "text/html")
-      : undefined;
+    const achievementsDom = achievementsData ? domParser.parseFromString(achievementsData, "text/html") : undefined;
     const achievementsDocument = achievementsDom as unknown as
       | Document
       | undefined;
@@ -64,18 +59,14 @@ export abstract class PageParser {
         mountsResponse.value.ok
       ? await mountsResponse.value.text()
       : undefined;
-    const mountsDom = mountsData
-      ? domParser.parseFromString(mountsData, "text/html")
-      : undefined;
+    const mountsDom = mountsData ? domParser.parseFromString(mountsData, "text/html") : undefined;
     const mountsDocument = mountsDom as unknown as Document | undefined;
 
     const minionsData = minionsResponse.status === "fulfilled" &&
         minionsResponse.value.ok
       ? await minionsResponse.value.text()
       : undefined;
-    const minionsDom = minionsData
-      ? domParser.parseFromString(minionsData, "text/html")
-      : undefined;
+    const minionsDom = minionsData ? domParser.parseFromString(minionsData, "text/html") : undefined;
     const minionsDocument = minionsDom as unknown as Document | undefined;
 
     const columnsQuery = ctx.req.query("columns");
@@ -205,9 +196,7 @@ export abstract class PageParser {
           .forEach((e) => elements.push(e as Element));
         return {
           isPatch: false,
-          data: elements.map((element) =>
-            this.handleElement(element, definition)
-          ),
+          data: elements.map((element) => this.handleElement(element, definition)),
         };
       }
       const element = document.querySelector(definition.selector as string);
@@ -292,9 +281,7 @@ export abstract class PageParser {
           Object.entries<string>(match.groups as Record<string, string>).reduce(
             (acc, [key, value]) => ({
               ...acc,
-              [StringFormatter.snakeCase(key)]: value !== undefined
-                ? (isNaN(+value) ? value : +value)
-                : null,
+              [StringFormatter.snakeCase(key)]: value !== undefined ? (isNaN(+value) ? value : +value) : null,
             }),
             {},
           ) || null

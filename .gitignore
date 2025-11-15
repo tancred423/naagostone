@@ -23,6 +23,7 @@ yarn-error.log*
 *.swp
 *.swo
 *~
+.idx
 
 # OS
 .DS_Store

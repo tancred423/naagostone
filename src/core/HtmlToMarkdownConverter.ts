@@ -110,8 +110,7 @@ export class HtmlToMarkdownConverter {
   private replaceImagesWithCounts(markdown: string): string {
     // Match both standalone images ![](url) and linked images [![](url)](link)
     // Group consecutive images together (separated only by whitespace)
-    const imagePattern =
-      /((?:\[?!\[[^\]]*\]\([^)]+\)\]?(?:\([^)]+\))?(?:\s*\n*\s*)?)+)(\n\n|\n)?/g;
+    const imagePattern = /((?:\[?!\[[^\]]*\]\([^)]+\)\]?(?:\([^)]+\))?(?:\s*\n*\s*)?)+)(\n\n|\n)?/g;
 
     let result = markdown.replace(
       imagePattern,

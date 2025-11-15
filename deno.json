@@ -3,6 +3,9 @@
     "start": "deno run --allow-net --allow-env src/server.ts",
     "dev": "deno run --allow-net --allow-env --watch src/server.ts"
   },
+  "fmt": {
+    "lineWidth": 120
+  },
   "imports": {
     "hono": "https://deno.land/x/hono@v4.0.10/mod.ts",
     "hono/middleware": "https://deno.land/x/hono@v4.0.10/middleware.ts",

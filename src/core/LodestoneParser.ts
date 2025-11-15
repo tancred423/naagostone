@@ -96,9 +96,7 @@ export abstract class LodestoneParser {
           .forEach((e) => elements.push(e as Element));
         return {
           isPatch: false,
-          data: elements.map((element) =>
-            this.handleElement(element, definition)
-          ),
+          data: elements.map((element) => this.handleElement(element, definition)),
         };
       }
       const element = document.querySelector(definition.selector as string);
@@ -183,9 +181,7 @@ export abstract class LodestoneParser {
           Object.entries<string>(match.groups as Record<string, string>).reduce(
             (acc, [key, value]) => ({
               ...acc,
-              [StringFormatter.snakeCase(key)]: value !== undefined
-                ? (isNaN(+value) ? value : +value)
-                : null,
+              [StringFormatter.snakeCase(key)]: value !== undefined ? (isNaN(+value) ? value : +value) : null,
             }),
             {},
           ) || null

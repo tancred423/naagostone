@@ -55,10 +55,39 @@ app.use("/*", rateLimiter.middleware());
 app.use("/*", async (context: Context, next: () => Promise<void>) => {
   const start = Date.now();
   await next();
+
   const ms = Date.now() - start;
-  log.info(
-    `${context.req.method} ${context.req.path} - ${context.res.status} (${ms}ms)`,
-  );
+  const status = context.res.status;
+  const isSuccess = status >= 200 && status < 300;
+
+  if (!isSuccess) {
+    if (context.req.path === "/favicon.ico") {
+      return;
+    }
+
+    let responseError: string | null = null;
+    try {
+      const response = context.res as Response;
+      if (response && typeof response.clone === "function") {
+        const clonedResponse = response.clone();
+        const contentType = clonedResponse.headers.get("content-type");
+        if (contentType?.includes("application/json")) {
+          const body = await clonedResponse.json();
+          if (body && typeof body === "object" && "error" in body) {
+            responseError = String(body.error);
+          }
+        }
+      }
+    } catch {
+      // If we can't read the response body, that's okay
+    }
+
+    const errorMsg = responseError || "Unknown error";
+    log.error(`${context.req.method} ${context.req.path} - ${status} (${ms}ms) - Error: ${errorMsg}`);
+    return;
+  }
+
+  log.info(`${context.req.method} ${context.req.path} - ${status} (${ms}ms)`);
 });
 
 app.get("/", (context: Context) => {
@@ -114,6 +143,10 @@ app.get("/", (context: Context) => {
       },
     },
   });
+});
+
+app.get("/favicon.ico", (context: Context) => {
+  return context.body(null, 204);
 });
 
 const characterParser = new Character();
@@ -310,87 +343,75 @@ function countDyeSlots(parsed: Record<string, unknown>) {
   }
 
   if (character.mainhand?.amount_dye_slots) {
-    character.mainhand.amount_dye_slots =
-      ((character.mainhand.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.mainhand.amount_dye_slots = ((character.mainhand.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.offhand?.amount_dye_slots) {
-    character.offhand.amount_dye_slots =
-      ((character.offhand.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.offhand.amount_dye_slots = ((character.offhand.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.head?.amount_dye_slots) {
-    character.head.amount_dye_slots =
-      ((character.head.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.head.amount_dye_slots = ((character.head.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.body?.amount_dye_slots) {
-    character.body.amount_dye_slots =
-      ((character.body.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.body.amount_dye_slots = ((character.body.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.hands?.amount_dye_slots) {
-    character.hands.amount_dye_slots =
-      ((character.hands.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.hands.amount_dye_slots = ((character.hands.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.legs?.amount_dye_slots) {
-    character.legs.amount_dye_slots =
-      ((character.legs.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.legs.amount_dye_slots = ((character.legs.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.feet?.amount_dye_slots) {
-    character.feet.amount_dye_slots =
-      ((character.feet.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.feet.amount_dye_slots = ((character.feet.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.earrings?.amount_dye_slots) {
-    character.earrings.amount_dye_slots =
-      ((character.earrings.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.earrings.amount_dye_slots = ((character.earrings.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.necklace?.amount_dye_slots) {
-    character.necklace.amount_dye_slots =
-      ((character.necklace.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.necklace.amount_dye_slots = ((character.necklace.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.bracelets?.amount_dye_slots) {
-    character.bracelets.amount_dye_slots =
-      ((character.bracelets.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.bracelets.amount_dye_slots = ((character.bracelets.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.ring1?.amount_dye_slots) {
-    character.ring1.amount_dye_slots =
-      ((character.ring1.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.ring1.amount_dye_slots = ((character.ring1.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   if (character.ring2?.amount_dye_slots) {
-    character.ring2.amount_dye_slots =
-      ((character.ring2.amount_dye_slots as string).split("<img")[0].match(
-        /staining/g,
-      ) || []).length;
+    character.ring2.amount_dye_slots = ((character.ring2.amount_dye_slots as string).split("<img")[0].match(
+      /staining/g,
+    ) || []).length;
   }
 
   return parsed;
@@ -511,8 +532,7 @@ app.get("/lodestone/topics", async (context: Context) => {
     for (const key in parsed.topics) {
       const topic = parsed.topics[key];
       if (topic && (topic as Record<string, unknown>).link) {
-        (topic as Record<string, unknown>).link =
-          "https://eu.finalfantasyxiv.com" +
+        (topic as Record<string, unknown>).link = "https://eu.finalfantasyxiv.com" +
           (topic as Record<string, unknown>).link;
       }
     }
@@ -554,8 +574,7 @@ app.get("/lodestone/notices", async (context: Context) => {
     } as Record<string, unknown>;
 
     for (const key in (parsed.notices as Record<string, unknown>)) {
-      const notice =
-        (parsed.notices as Record<string, Record<string, unknown>>)[key];
+      const notice = (parsed.notices as Record<string, Record<string, unknown>>)[key];
       if (notice?.link) {
         notice.link = "https://eu.finalfantasyxiv.com" + notice.link;
       }
@@ -570,9 +589,7 @@ app.get("/lodestone/notices", async (context: Context) => {
     parsed.notices = resArray;
 
     const detailsPromises = (parsed.notices as Array<Record<string, unknown>>)
-      .map((notice) =>
-        noticesDetailsParser.parse(context, "", notice.link as string)
-      );
+      .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.notices as Array<Record<string, unknown>>).forEach(
@@ -603,11 +620,9 @@ app.get("/lodestone/maintenances", async (context: Context) => {
     } as Record<string, unknown>;
 
     for (
-      const key
-        in (parsed.maintenances as Record<string, Record<string, unknown>>)
+      const key in (parsed.maintenances as Record<string, Record<string, unknown>>)
     ) {
-      const maintenance =
-        (parsed.maintenances as Record<string, Record<string, unknown>>)[key];
+      const maintenance = (parsed.maintenances as Record<string, Record<string, unknown>>)[key];
       if (maintenance?.link) {
         maintenance.link = "https://eu.finalfantasyxiv.com" + maintenance.link;
       }
@@ -617,23 +632,21 @@ app.get("/lodestone/maintenances", async (context: Context) => {
     for (
       const maintenanceKey in (parsed.maintenances as Record<string, unknown>)
     ) {
-      const maintenance =
-        (parsed.maintenances as Record<string, unknown>)[maintenanceKey];
+      const maintenance = (parsed.maintenances as Record<string, unknown>)[maintenanceKey];
       if (maintenance) resArray.push(maintenance);
     }
 
     parsed.maintenances = resArray;
 
-    const detailsPromises =
-      (parsed.maintenances as Array<Record<string, unknown>>).map((
-        maintenance,
-      ) =>
-        maintenanceDetailsParser.parse(
-          context,
-          "",
-          (maintenance as Record<string, unknown>)?.link as string,
-        )
-      );
+    const detailsPromises = (parsed.maintenances as Array<Record<string, unknown>>).map((
+      maintenance,
+    ) =>
+      maintenanceDetailsParser.parse(
+        context,
+        "",
+        (maintenance as Record<string, unknown>)?.link as string,
+      )
+    );
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.maintenances as Array<Record<string, unknown>>).forEach(
@@ -649,12 +662,8 @@ app.get("/lodestone/maintenances", async (context: Context) => {
             const timestamps = markdownConverter.extractMaintenanceTimestamps(
               maintenance.description,
             );
-            maintenance.start_timestamp = timestamps.start_timestamp
-              ? timestamps.start_timestamp * 1000
-              : null;
-            maintenance.end_timestamp = timestamps.end_timestamp
-              ? timestamps.end_timestamp * 1000
-              : null;
+            maintenance.start_timestamp = timestamps.start_timestamp ? timestamps.start_timestamp * 1000 : null;
+            maintenance.end_timestamp = timestamps.end_timestamp ? timestamps.end_timestamp * 1000 : null;
           }
         }
       },
@@ -688,8 +697,7 @@ app.get("/lodestone/updates", async (context: Context) => {
     for (
       const key in (parsed.updates as Record<string, Record<string, unknown>>)
     ) {
-      const update =
-        (parsed.updates as Record<string, Record<string, unknown>>)[key];
+      const update = (parsed.updates as Record<string, Record<string, unknown>>)[key];
       if (update?.link) {
         update.link = "https://eu.finalfantasyxiv.com" + update.link;
       }
@@ -704,9 +712,7 @@ app.get("/lodestone/updates", async (context: Context) => {
     parsed.updates = resArray;
 
     const detailsPromises = (parsed.updates as Array<Record<string, unknown>>)
-      .map((update) =>
-        updatesDetailsParser.parse(context, "", update.link as string)
-      );
+      .map((update) => updatesDetailsParser.parse(context, "", update.link as string));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.updates as Array<Record<string, unknown>>).forEach(
@@ -743,8 +749,7 @@ app.get("/lodestone/statuses", async (context: Context) => {
     for (
       const key in (parsed.statuses as Record<string, Record<string, unknown>>)
     ) {
-      const statusItem =
-        (parsed.statuses as Record<string, Record<string, unknown>>)[key];
+      const statusItem = (parsed.statuses as Record<string, Record<string, unknown>>)[key];
       if (statusItem?.link) {
         statusItem.link = "https://eu.finalfantasyxiv.com" + statusItem.link;
       }
@@ -752,17 +757,14 @@ app.get("/lodestone/statuses", async (context: Context) => {
 
     const resArray: unknown[] = [];
     for (const statusKey in (parsed.statuses as Record<string, unknown>)) {
-      const statusItem =
-        (parsed.statuses as Record<string, unknown>)[statusKey];
+      const statusItem = (parsed.statuses as Record<string, unknown>)[statusKey];
       if (statusItem) resArray.push(statusItem);
     }
 
     parsed.statuses = resArray;
 
     const detailsPromises = (parsed.statuses as Array<Record<string, unknown>>)
-      .map((statusItem) =>
-        statusDetailsParser.parse(context, "", statusItem.link as string)
-      );
+      .map((statusItem) => statusDetailsParser.parse(context, "", statusItem.link as string));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.statuses as Array<Record<string, unknown>>).forEach(
