@@ -1,4 +1,5 @@
 import { PageParser } from "./PageParser.ts";
+import { RequestPriority } from "./LodestoneRequestQueue.ts";
 import type { Context } from "hono";
 
 export abstract class PaginatedPageParser extends PageParser {
@@ -16,8 +17,9 @@ export abstract class PaginatedPageParser extends PageParser {
   override async parse(
     ctx: Context,
     columnsPrefix: string = "",
+    priority: number = RequestPriority.NORMAL,
   ): Promise<object> {
-    let baseParse = await super.parse(ctx, columnsPrefix) as Record<
+    let baseParse = await super.parse(ctx, columnsPrefix, priority) as Record<
       string,
       unknown
     >;

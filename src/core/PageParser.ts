@@ -5,7 +5,7 @@ import * as RegexTranslator from "regex-translator";
 import { Document, DOMParser, Element } from "deno-dom";
 import { StringFormatter } from "./StringFormatter.ts";
 import { HttpClient } from "./HttpClient.ts";
-import { lodestoneQueue } from "./LodestoneRequestQueue.ts";
+import { lodestoneQueue, RequestPriority } from "./LodestoneRequestQueue.ts";
 
 const domParser = new DOMParser();
 
@@ -14,10 +14,10 @@ export abstract class PageParser {
 
   protected abstract getCSSSelectors(): CssSelectorRegistry;
 
-  public async parse(ctx: Context, columnsPrefix = ""): Promise<object> {
+  public async parse(ctx: Context, columnsPrefix = "", priority: number = RequestPriority.NORMAL): Promise<object> {
     const url = this.getURL(ctx);
 
-    const response = await lodestoneQueue.fetchWithTimeout(url);
+    const response = await lodestoneQueue.fetchWithTimeout(url, {}, priority);
     if (!response.ok) {
       throw new Error(response.status.toString());
     }
@@ -31,14 +31,14 @@ export abstract class PageParser {
       mountsResponse,
       minionsResponse,
     ] = await Promise.allSettled([
-      lodestoneQueue.fetchWithTimeout(`${url}/class_job`),
-      lodestoneQueue.fetchWithTimeout(`${url}/achievement/?order=2`),
+      lodestoneQueue.fetchWithTimeout(`${url}/class_job`, {}, priority),
+      lodestoneQueue.fetchWithTimeout(`${url}/achievement/?order=2`, {}, priority),
       lodestoneQueue.fetchWithTimeout(`${url}/mount`, {
         userAgent: HttpClient.USER_AGENT_MOBILE,
-      }),
+      }, priority),
       lodestoneQueue.fetchWithTimeout(`${url}/minion`, {
         userAgent: HttpClient.USER_AGENT_MOBILE,
-      }),
+      }, priority),
     ]);
 
     const classJobData = classJobResponse.status === "fulfilled" && classJobResponse.value.ok

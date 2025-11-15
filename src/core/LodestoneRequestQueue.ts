@@ -7,6 +7,13 @@ interface QueuedRequest {
   resolve: (response: Response) => void;
   reject: (error: Error) => void;
   queuedAt: number;
+  priority: number;
+}
+
+export enum RequestPriority {
+  HIGH = 1, // Character search, character by ID - user-facing, needs fast response
+  NORMAL = 5, // Default priority
+  LOW = 10, // News endpoints - less critical, can wait
 }
 
 export class LodestoneRequestQueue {
@@ -22,15 +29,25 @@ export class LodestoneRequestQueue {
   fetchWithTimeout(
     url: string,
     options: FetchOptions = {},
+    priority: number = RequestPriority.NORMAL,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
-      this.queue.push({
+      const request: QueuedRequest = {
         url,
         options,
         resolve,
         reject,
         queuedAt: Date.now(),
-      });
+        priority,
+      };
+
+      // Insert request in priority order (lower number = higher priority)
+      const insertIndex = this.queue.findIndex((req) => req.priority > priority);
+      if (insertIndex === -1) {
+        this.queue.push(request);
+      } else {
+        this.queue.splice(insertIndex, 0, request);
+      }
 
       this.processQueue();
     });
@@ -78,8 +95,13 @@ export class LodestoneRequestQueue {
           log.warn(`Lodestone rate limited (429) for ${request.url}, waiting ${waitTime}ms before retry`);
           await new Promise((resolve) => setTimeout(resolve, waitTime));
 
-          // Retry the request (preserve original queue time for accurate delay tracking)
-          this.queue.unshift(request);
+          // Retry the request (preserve original queue time and priority for accurate delay tracking)
+          const insertIndex = this.queue.findIndex((req) => req.priority > request.priority);
+          if (insertIndex === -1) {
+            this.queue.push(request);
+          } else {
+            this.queue.splice(insertIndex, 0, request);
+          }
           this.lastRequestTime = Date.now();
           continue;
         }

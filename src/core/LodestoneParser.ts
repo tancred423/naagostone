@@ -4,7 +4,7 @@ import type { CssSelectorRegistry } from "../interface/CssSelectorRegistry.ts";
 import * as RegexTranslator from "regex-translator";
 import { Document, DOMParser, Element } from "deno-dom";
 import { StringFormatter } from "./StringFormatter.ts";
-import { lodestoneQueue } from "./LodestoneRequestQueue.ts";
+import { lodestoneQueue, RequestPriority } from "./LodestoneRequestQueue.ts";
 
 const domParser = new DOMParser();
 
@@ -17,10 +17,11 @@ export abstract class LodestoneParser {
     ctx: Context,
     columnsPrefix: string = "",
     customUrl: string | undefined = undefined,
+    priority: number = RequestPriority.NORMAL,
   ): Promise<object> {
     const url = customUrl ? customUrl : this.getURL(ctx);
 
-    const response = await lodestoneQueue.fetchWithTimeout(url);
+    const response = await lodestoneQueue.fetchWithTimeout(url, {}, priority);
     if (!response.ok) {
       throw new Error(response.status.toString());
     }

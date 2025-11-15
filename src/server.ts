@@ -18,6 +18,7 @@ import { Updates } from "./parser/news/Updates.ts";
 import { UpdatesDetails } from "./parser/news/UpdatesDetails.ts";
 import { Status } from "./parser/news/Status.ts";
 import { StatusDetails } from "./parser/news/StatusDetails.ts";
+import { RequestPriority } from "./core/LodestoneRequestQueue.ts";
 
 await load({ export: true });
 
@@ -193,7 +194,7 @@ app.get("/character/search", async (context: Context) => {
   }
 
   try {
-    const parsed = await characterSearch.parse(context);
+    const parsed = await characterSearch.parse(context, "", RequestPriority.HIGH);
     return context.json(parsed as Record<string, unknown>);
   } catch (err: unknown) {
     const error = err as Error;
@@ -217,7 +218,7 @@ app.get("/character/:characterId", async (context: Context) => {
   }
 
   try {
-    const character = await characterParser.parse(context, "Character.");
+    const character = await characterParser.parse(context, "Character.", RequestPriority.HIGH);
     let parsed = {
       character: {
         id: +characterId,
@@ -532,7 +533,7 @@ app.get("/lodestone/topics", async (context: Context) => {
   context.header("Cache-Control", "public, max-age=300");
 
   try {
-    const topics = await topicsParser.parse(context);
+    const topics = await topicsParser.parse(context, "", undefined, RequestPriority.LOW);
     const topicsFiltered = Object.fromEntries(
       Object.entries(topics).filter(([_, v]) => v !== null),
     );
@@ -576,7 +577,7 @@ app.get("/lodestone/notices", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
-    const notices = await noticesParser.parse(context);
+    const notices = await noticesParser.parse(context, "", undefined, RequestPriority.LOW);
     const noticesFiltered = Object.fromEntries(
       Object.entries(notices).filter(([_, v]) => v !== null),
     );
@@ -617,7 +618,7 @@ app.get("/lodestone/notices", async (context: Context) => {
     } as Record<string, unknown>;
 
     const detailsPromises = top10Notices
-      .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string));
+      .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string, RequestPriority.LOW));
     const detailsResults = await Promise.all(detailsPromises);
 
     top10Notices.forEach(
@@ -640,7 +641,7 @@ app.get("/lodestone/maintenances", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
-    const maintenances = await maintenanceParser.parse(context);
+    const maintenances = await maintenanceParser.parse(context, "", undefined, RequestPriority.LOW);
     const parsed = {
       maintenances: {
         ...maintenances,
@@ -673,6 +674,7 @@ app.get("/lodestone/maintenances", async (context: Context) => {
         context,
         "",
         (maintenance as Record<string, unknown>)?.link as string,
+        RequestPriority.LOW,
       )
     );
     const detailsResults = await Promise.all(detailsPromises);
@@ -711,7 +713,7 @@ app.get("/lodestone/updates", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
-    const updates = await updatesParser.parse(context);
+    const updates = await updatesParser.parse(context, "", undefined, RequestPriority.LOW);
     const updatesFiltered = Object.fromEntries(
       Object.entries(updates).filter(([_, v]) => v !== null),
     );
@@ -740,7 +742,7 @@ app.get("/lodestone/updates", async (context: Context) => {
     parsed.updates = resArray;
 
     const detailsPromises = (parsed.updates as Array<Record<string, unknown>>)
-      .map((update) => updatesDetailsParser.parse(context, "", update.link as string));
+      .map((update) => updatesDetailsParser.parse(context, "", update.link as string, RequestPriority.LOW));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.updates as Array<Record<string, unknown>>).forEach(
@@ -763,7 +765,7 @@ app.get("/lodestone/statuses", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
-    const status = await statusParser.parse(context);
+    const status = await statusParser.parse(context, "", undefined, RequestPriority.LOW);
     const statusFiltered = Object.fromEntries(
       Object.entries(status).filter(([_, v]) => v !== null),
     );
@@ -792,7 +794,7 @@ app.get("/lodestone/statuses", async (context: Context) => {
     parsed.statuses = resArray;
 
     const detailsPromises = (parsed.statuses as Array<Record<string, unknown>>)
-      .map((statusItem) => statusDetailsParser.parse(context, "", statusItem.link as string));
+      .map((statusItem) => statusDetailsParser.parse(context, "", statusItem.link as string, RequestPriority.LOW));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.statuses as Array<Record<string, unknown>>).forEach(
