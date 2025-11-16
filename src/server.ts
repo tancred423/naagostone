@@ -19,6 +19,7 @@ import { UpdatesDetails } from "./parser/news/UpdatesDetails.ts";
 import { Status } from "./parser/news/Status.ts";
 import { StatusDetails } from "./parser/news/StatusDetails.ts";
 import { RequestPriority } from "./core/LodestoneRequestQueue.ts";
+import { FreeCompany } from "./parser/freecompany/FreeCompany.ts";
 
 await load({ export: true });
 
@@ -171,6 +172,7 @@ app.get("/favicon.ico", (context: Context) => {
 
 const characterParser = new Character();
 const characterSearch = new CharacterSearch();
+const freeCompanyParser = new FreeCompany();
 const topicsParser = new Topics();
 const noticesParser = new Notices();
 const noticesDetailsParser = new NoticesDetails();
@@ -244,6 +246,54 @@ app.get("/character/:characterId", async (context: Context) => {
         html: bioHtml,
         markdown: markdownConverter.convert(bioHtml),
       };
+    }
+
+    // Fetch free company tag if free company ID exists
+    const freeCompany = characterData.free_company as Record<string, unknown> | undefined;
+    if (freeCompany?.id) {
+      freeCompany.tag = null;
+
+      try {
+        // Clean and validate the free company ID
+        // The parser now preserves large numbers as strings to avoid precision loss
+        let freeCompanyId = String(freeCompany.id).trim();
+
+        // Remove any trailing slashes or extra characters that might have been captured
+        freeCompanyId = freeCompanyId.replace(/\/$/, "").trim();
+
+        // Remove any non-numeric characters (in case the regex captured extra stuff)
+        const numericId = freeCompanyId.replace(/[^0-9]/g, "");
+
+        if (!numericId || numericId === "null" || numericId === "undefined") {
+          log.warn(`Invalid free company ID: ${freeCompany.id} (cleaned: ${freeCompanyId})`);
+        } else {
+          const freeCompanyUrl = `https://eu.finalfantasyxiv.com/lodestone/freecompany/${numericId}/`;
+          log.debug(`Fetching free company tag from: ${freeCompanyUrl}`);
+
+          const freeCompanyData = await freeCompanyParser.parse(
+            context,
+            "",
+            freeCompanyUrl,
+            RequestPriority.HIGH,
+          ) as Record<string, unknown>;
+
+          const tag = freeCompanyData.tag as string | undefined;
+          if (tag) {
+            // Remove &laquo; and &raquo; HTML entities, and also the decoded characters « and »
+            const cleanedTag = tag
+              .replace(/&laquo;/g, "")
+              .replace(/&raquo;/g, "")
+              .replace(/«/g, "")
+              .replace(/»/g, "")
+              .trim();
+            freeCompany.tag = cleanedTag;
+          }
+        }
+      } catch (err: unknown) {
+        const error = err as Error;
+        // Log but don't fail the request if free company tag fetch fails
+        log.warn(`Failed to fetch free company tag for ID "${freeCompany.id}": ${error.message}`);
+      }
     }
 
     return context.json(parsed);

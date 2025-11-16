@@ -180,10 +180,26 @@ export abstract class LodestoneParser {
       if (match) {
         return (
           Object.entries<string>(match.groups as Record<string, string>).reduce(
-            (acc, [key, value]) => ({
-              ...acc,
-              [StringFormatter.snakeCase(key)]: value !== undefined ? (isNaN(+value) ? value : +value) : null,
-            }),
+            (acc, [key, value]) => {
+              if (value === undefined) {
+                return acc;
+              }
+              // Keep very large numbers as strings to preserve precision (e.g., free company IDs)
+              // Numbers larger than MAX_SAFE_INTEGER (2^53 - 1 = 9007199254740991) lose precision
+              // Check string length first to avoid precision loss during conversion
+              const isLargeNumber = /^\d+$/.test(value) && value.length > 15;
+              if (isLargeNumber) {
+                return {
+                  ...acc,
+                  [StringFormatter.snakeCase(key)]: value,
+                };
+              }
+              const numValue = +value;
+              return {
+                ...acc,
+                [StringFormatter.snakeCase(key)]: isNaN(numValue) ? value : numValue,
+              };
+            },
             {},
           ) || null
         );
