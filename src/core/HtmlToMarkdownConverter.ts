@@ -137,6 +137,99 @@ export class HtmlToMarkdownConverter {
   }
 
   private convertDatesToDiscordTimestamps(markdown: string): string {
+    // Pattern 12h-a: 12-hour time with am/pm (multi-line with timezone variants)
+    // Must run BEFORE preprocessing strips am/pm - this pattern is intentional 12-hour format
+    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)\n\nNov. 27, 2025 10:20 a.m. to 10:55 a.m. (AEDT)"
+    markdown = markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)(?:\s*\n[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s*[ap]\.?m\.?\s+to\s+\d{1,2}:\d{2}\s*[ap]\.?m\.?\s+\([A-Z]{3,5}\)){1,}/gi,
+      (
+        match,
+        month,
+        day,
+        year,
+        startHour,
+        startMinute,
+        startAmPm,
+        endHour,
+        endMinute,
+        endAmPm,
+      ) => {
+        const start24Hour = this.convert12To24Hour(parseInt(startHour), startAmPm);
+        const end24Hour = this.convert12To24Hour(parseInt(endHour), endAmPm);
+
+        const startTimestamp = this.parseDateTimeToTimestamp(
+          day,
+          month,
+          year,
+          start24Hour.toString(),
+          startMinute,
+        );
+        let endTimestamp = this.parseDateTimeToTimestamp(
+          day,
+          month,
+          year,
+          end24Hour.toString(),
+          endMinute,
+        );
+
+        if (startTimestamp && endTimestamp) {
+          if (endTimestamp <= startTimestamp) {
+            endTimestamp += 86400;
+          }
+          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
+          const endFormat = sameDay ? "t" : "f";
+          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
+        }
+        return match;
+      },
+    );
+
+    // Pattern 12h-b: 12-hour time with am/pm (single line)
+    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)"
+    markdown = markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)/gi,
+      (
+        match,
+        month,
+        day,
+        year,
+        startHour,
+        startMinute,
+        startAmPm,
+        endHour,
+        endMinute,
+        endAmPm,
+      ) => {
+        const start24Hour = this.convert12To24Hour(parseInt(startHour), startAmPm);
+        const end24Hour = this.convert12To24Hour(parseInt(endHour), endAmPm);
+
+        const startTimestamp = this.parseDateTimeToTimestamp(
+          day,
+          month,
+          year,
+          start24Hour.toString(),
+          startMinute,
+        );
+        let endTimestamp = this.parseDateTimeToTimestamp(
+          day,
+          month,
+          year,
+          end24Hour.toString(),
+          endMinute,
+        );
+
+        if (startTimestamp && endTimestamp) {
+          if (endTimestamp <= startTimestamp) {
+            endTimestamp += 86400;
+          }
+          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
+          const endFormat = sameDay ? "t" : "f";
+          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
+        }
+        return match;
+      },
+    );
+
     // Preprocessing: Remove erroneous am/pm markers (24-hour format with am/pm is an error)
     markdown = markdown.replace(/(\d{1,2}:\d{2})\s+(am|pm)/gi, "$1");
 
@@ -504,6 +597,14 @@ export class HtmlToMarkdownConverter {
     );
   }
 
+  private convert12To24Hour(hour: number, amPm: string): number {
+    const isPm = amPm.toLowerCase() === "p";
+    if (hour === 12) {
+      return isPm ? 12 : 0;
+    }
+    return isPm ? hour + 12 : hour;
+  }
+
   private parseDateTimeToTimestamp(
     day: string,
     month: string,
@@ -686,6 +787,40 @@ export class HtmlToMarkdownConverter {
     text = text.replace(/&nbsp;/g, " ");
     text = text.replace(/\s+/g, " ");
 
+    // Pattern 0: 12-hour time with am/pm (intentional 12-hour format)
+    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)"
+    let match = text.match(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)/i,
+    );
+    if (match) {
+      const start24Hour = this.convert12To24Hour(parseInt(match[4]), match[6]);
+      const end24Hour = this.convert12To24Hour(parseInt(match[7]), match[9]);
+
+      const startTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        start24Hour.toString(),
+        match[5],
+      );
+      let endTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        end24Hour.toString(),
+        match[8],
+      );
+
+      if (startTimestamp && endTimestamp) {
+        if (endTimestamp <= startTimestamp) {
+          endTimestamp += 86400;
+        }
+        result.start_timestamp = startTimestamp;
+        result.end_timestamp = endTimestamp;
+        return result;
+      }
+    }
+
     // Remove erroneous am/pm markers (24-hour format with am/pm is an error)
     text = text.replace(/(\d{1,2}:\d{2})\s+(am|pm)/gi, "$1");
 
@@ -693,7 +828,7 @@ export class HtmlToMarkdownConverter {
 
     // Pattern 1: Date with time range "to" with optional "From" prefix
     // Example: "From Nov. 4, 2025 7:00 to 8:00 (GMT)" or "Oct. 1, 2025 02:06 to 02:55 (GMT)"
-    let match = text.match(
+    match = text.match(
       /(?:From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
