@@ -10,6 +10,15 @@ interface QueuedRequest {
   priority: number;
 }
 
+interface CachedResponse {
+  body: string;
+  status: number;
+  headers: Headers;
+  cachedAt: number;
+}
+
+type CacheType = "news" | "maintenance" | "updates" | "status";
+
 export enum RequestPriority {
   HIGH = 1, // Character search, character by ID - user-facing, needs fast response
   NORMAL = 5, // Default priority
@@ -21,9 +30,29 @@ export class LodestoneRequestQueue {
   private processing = false;
   private readonly delayBetweenRequests: number;
   private lastRequestTime = 0;
+  private readonly caches: Map<CacheType, Map<string, CachedResponse>>;
+  private readonly maxCacheSizePerType: number;
 
-  constructor(delayBetweenRequests: number = 200) {
+  constructor(
+    delayBetweenRequests: number = 200,
+    maxCacheSizePerType: number = 10,
+  ) {
     this.delayBetweenRequests = delayBetweenRequests;
+    this.maxCacheSizePerType = maxCacheSizePerType;
+    this.caches = new Map([
+      ["news", new Map()],
+      ["maintenance", new Map()],
+      ["updates", new Map()],
+      ["status", new Map()],
+    ]);
+  }
+
+  private getCacheType(url: string): CacheType | null {
+    if (url.includes("/news/detail/")) return "news";
+    if (url.includes("/maintenance/detail/")) return "maintenance";
+    if (url.includes("/updates/detail/")) return "updates";
+    if (url.includes("/status/detail/")) return "status";
+    return null;
   }
 
   fetchWithTimeout(
@@ -31,6 +60,21 @@ export class LodestoneRequestQueue {
     options: FetchOptions = {},
     priority: number = RequestPriority.NORMAL,
   ): Promise<Response> {
+    const cacheType = this.getCacheType(url);
+    if (cacheType) {
+      const cache = this.caches.get(cacheType)!;
+      const cached = cache.get(url);
+      if (cached) {
+        log.debug(`Cache hit for ${cacheType}: ${url}`);
+        return Promise.resolve(
+          new Response(cached.body, {
+            status: cached.status,
+            headers: cached.headers,
+          }),
+        );
+      }
+    }
+
     return new Promise((resolve, reject) => {
       const request: QueuedRequest = {
         url,
@@ -41,7 +85,6 @@ export class LodestoneRequestQueue {
         priority,
       };
 
-      // Insert request in priority order (lower number = higher priority)
       const insertIndex = this.queue.findIndex((req) => req.priority > priority);
       if (insertIndex === -1) {
         this.queue.push(request);
@@ -62,13 +105,10 @@ export class LodestoneRequestQueue {
 
     while (this.queue.length > 0) {
       const request = this.queue.shift();
-      if (!request) {
-        break;
-      }
+      if (!request) break;
 
       const queueWaitTime = Date.now() - request.queuedAt;
 
-      // Ensure minimum delay between requests
       const timeSinceLastRequest = Date.now() - this.lastRequestTime;
       let throttleDelay = 0;
       if (timeSinceLastRequest < this.delayBetweenRequests) {
@@ -78,24 +118,19 @@ export class LodestoneRequestQueue {
 
       const totalDelay = queueWaitTime + throttleDelay;
       log.debug(
-        `Lodestone request queue delay: ${totalDelay}ms (queued: ${queueWaitTime}ms, throttled: ${throttleDelay}ms) for ${request.url}`,
+        `Request queue delay: ${totalDelay}ms (queued: ${queueWaitTime}ms, throttled: ${throttleDelay}ms) for ${request.url}`,
       );
 
       try {
-        const response = await HttpClient.fetchWithTimeout(
-          request.url,
-          request.options,
-        );
+        const response = await HttpClient.fetchWithTimeout(request.url, request.options);
 
-        // If we get a 429, wait longer before retrying
         if (response.status === 429) {
           const retryAfter = response.headers.get("Retry-After");
           const waitTime = retryAfter ? parseInt(retryAfter, 10) * 1000 : this.delayBetweenRequests * 5;
 
-          log.warn(`Lodestone rate limited (429) for ${request.url}, waiting ${waitTime}ms before retry`);
+          log.warn(`Rate limited (429) for ${request.url}, waiting ${waitTime}ms`);
           await new Promise((resolve) => setTimeout(resolve, waitTime));
 
-          // Retry the request (preserve original queue time and priority for accurate delay tracking)
           const insertIndex = this.queue.findIndex((req) => req.priority > request.priority);
           if (insertIndex === -1) {
             this.queue.push(request);
@@ -107,7 +142,26 @@ export class LodestoneRequestQueue {
         }
 
         this.lastRequestTime = Date.now();
-        request.resolve(response);
+
+        const cacheType = this.getCacheType(request.url);
+        if (response.ok && cacheType) {
+          const body = await response.text();
+          this.addToCache(cacheType, request.url, {
+            body,
+            status: response.status,
+            headers: new Headers(response.headers),
+            cachedAt: Date.now(),
+          });
+
+          request.resolve(
+            new Response(body, {
+              status: response.status,
+              headers: response.headers,
+            }),
+          );
+        } else {
+          request.resolve(response);
+        }
       } catch (error) {
         this.lastRequestTime = Date.now();
         request.reject(error as Error);
@@ -116,7 +170,53 @@ export class LodestoneRequestQueue {
 
     this.processing = false;
   }
+
+  private addToCache(cacheType: CacheType, url: string, entry: CachedResponse): void {
+    const cache = this.caches.get(cacheType)!;
+
+    if (cache.size >= this.maxCacheSizePerType) {
+      let oldestKey: string | null = null;
+      let oldestTime = Infinity;
+
+      for (const [key, value] of cache) {
+        if (value.cachedAt < oldestTime) {
+          oldestTime = value.cachedAt;
+          oldestKey = key;
+        }
+      }
+
+      if (oldestKey) {
+        cache.delete(oldestKey);
+        log.debug(`Cache evicted oldest ${cacheType} entry: ${oldestKey}`);
+      }
+    }
+
+    cache.set(url, entry);
+    log.debug(`Cached ${cacheType}: ${url} (${cacheType} cache size: ${cache.size})`);
+  }
+
+  clearCache(cacheType?: CacheType): void {
+    if (cacheType) {
+      this.caches.get(cacheType)?.clear();
+      log.debug(`${cacheType} cache cleared`);
+    } else {
+      for (const cache of this.caches.values()) {
+        cache.clear();
+      }
+      log.debug("All caches cleared");
+    }
+  }
+
+  getCacheStats(): Record<CacheType, { size: number; entries: string[] }> {
+    const stats: Record<string, { size: number; entries: string[] }> = {};
+    for (const [type, cache] of this.caches) {
+      stats[type] = {
+        size: cache.size,
+        entries: Array.from(cache.keys()),
+      };
+    }
+    return stats as Record<CacheType, { size: number; entries: string[] }>;
+  }
 }
 
-// Singleton instance for all Lodestone requests
-export const lodestoneQueue = new LodestoneRequestQueue(200);
+export const lodestoneQueue = new LodestoneRequestQueue(200, 10);
