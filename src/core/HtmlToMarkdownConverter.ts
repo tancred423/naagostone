@@ -437,9 +437,9 @@ export class HtmlToMarkdownConverter {
     );
 
     // Pattern 2a: Date range "to" with explicit end date (multi timezone lines)
-    // Example: "Nov. 5, 2025 4:24 to Nov. 14, 2025 11:30 (GMT)  \nNov. 5, 2025 15:24 to Nov. 14, 2025 22:30 (AEDT)"
+    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)\nNov. 21, 2025 17:00 to Dec. 1, 2025 19:00 (AEDT)"
     markdown = markdown.replace(
-      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n(?:From\s+)?[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+to\s+[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+\([A-Z]{3,5}\)){1,}/gi,
+      /(From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n(?:From\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+to\s+[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+\([A-Z]{3,5}\)){1,}/gi,
       (
         match,
         fromPrefix,
@@ -468,9 +468,9 @@ export class HtmlToMarkdownConverter {
     );
 
     // Pattern 2b: Date range "to" with explicit end date (single line)
-    // Example: "Nov. 5, 2025 4:24 to Nov. 14, 2025 11:30 (GMT)"
+    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)"
     markdown = markdown.replace(
-      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      /(From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (
         match,
         fromPrefix,
@@ -826,10 +826,38 @@ export class HtmlToMarkdownConverter {
 
     // Try multiple patterns to extract timestamps
 
-    // Pattern 1: Date with time range "to" with optional "From" prefix
+    // Pattern 1: Date range "to" with explicit end date
+    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)"
+    match = text.match(
+      /(?:From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const startTimestamp = this.parseDateTimeToTimestamp(
+        match[2],
+        match[1],
+        match[3],
+        match[4],
+        match[5],
+      );
+      const endTimestamp = this.parseDateTimeToTimestamp(
+        match[7],
+        match[6],
+        match[8],
+        match[9],
+        match[10],
+      );
+
+      if (startTimestamp && endTimestamp) {
+        result.start_timestamp = startTimestamp;
+        result.end_timestamp = endTimestamp;
+        return result;
+      }
+    }
+
+    // Pattern 1b: Date with time range "to" same day with optional "From" prefix
     // Example: "From Nov. 4, 2025 7:00 to 8:00 (GMT)" or "Oct. 1, 2025 02:06 to 02:55 (GMT)"
     match = text.match(
-      /(?:From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+      /(?:From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
       const startTimestamp = this.parseDateTimeToTimestamp(
