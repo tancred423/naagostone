@@ -597,7 +597,20 @@ app.get("/lodestone/topics", async (context: Context) => {
 
     parsed.topics = resArray as unknown as Record<string, unknown>;
 
-    const withMarkdown = markdownConverter.addMarkdownFields(parsed);
+    const withMarkdown = markdownConverter.addMarkdownFields(parsed) as Record<string, unknown>;
+
+    const topicsArray = withMarkdown.topics as Array<Record<string, unknown>>;
+    for (const topic of topicsArray) {
+      topic.timestamp_live_letter = null;
+      const title = topic.title as string | undefined;
+      if (title && /letter from the producer live/i.test(title)) {
+        const description = topic.description as { markdown?: string } | undefined;
+        if (description?.markdown) {
+          topic.timestamp_live_letter = markdownConverter.extractLiveLetterTimestamp(description.markdown);
+        }
+      }
+    }
+
     return context.json(withMarkdown);
   } catch (err: unknown) {
     const error = err as Error;
