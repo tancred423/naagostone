@@ -19,6 +19,7 @@ import { Status } from "./parser/news/Status.ts";
 import { StatusDetails } from "./parser/news/StatusDetails.ts";
 import { RequestPriority } from "./core/LodestoneRequestQueue.ts";
 import { FreeCompany } from "./parser/freecompany/FreeCompany.ts";
+import { WorldStatus } from "./parser/worldstatus/WorldStatus.ts";
 
 await load({ export: true });
 
@@ -159,6 +160,11 @@ app.get("/", (context: Context) => {
           path: "/lodestone/statuses",
           description: "Get statuses with details",
         },
+        worldstatus: {
+          method: "GET",
+          path: "/lodestone/worldstatus",
+          description: "Get world status for all data centers",
+        },
       },
     },
   });
@@ -180,6 +186,7 @@ const updatesParser = new Updates();
 const updatesDetailsParser = new UpdatesDetails();
 const statusParser = new Status();
 const statusDetailsParser = new StatusDetails();
+const worldStatusParser = new WorldStatus();
 
 app.get("/character/search", async (context: Context) => {
   const name = context.req.query("name");
@@ -855,6 +862,21 @@ app.get("/lodestone/statuses", async (context: Context) => {
     return context.json(withMarkdown);
   } catch (err: unknown) {
     const error = err as Error;
+    if (error.message === "404") {
+      return context.json({ error: "Not found" }, 404);
+    } else return context.json({ error: error.message }, 500);
+  }
+});
+
+app.get("/lodestone/worldstatus", async (context: Context) => {
+  context.header("Cache-Control", "max-age=60");
+
+  try {
+    const worldStatus = await worldStatusParser.parse(context);
+    return context.json(worldStatus);
+  } catch (err: unknown) {
+    const error = err as Error;
+    log.error(`World status fetch error: ${error.message}`);
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
     } else return context.json({ error: error.message }, 500);
