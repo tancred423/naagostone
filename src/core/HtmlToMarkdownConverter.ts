@@ -5,6 +5,10 @@ export class HtmlToMarkdownConverter {
 
   constructor() {
     this.turndownService = new TurndownService();
+    this.turndownService.addRule("horizontalRule", {
+      filter: "hr",
+      replacement: () => "\n\n───────────────────────────────\n\n",
+    });
   }
 
   convert(html: string, link?: string): string {
