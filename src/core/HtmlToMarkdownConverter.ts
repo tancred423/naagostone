@@ -141,453 +141,141 @@ export class HtmlToMarkdownConverter {
   }
 
   private convertDatesToDiscordTimestamps(markdown: string): string {
-    // Pattern 12h-a: 12-hour time with am/pm (multi-line with timezone variants)
-    // Must run BEFORE preprocessing strips am/pm - this pattern is intentional 12-hour format
-    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)\n\nNov. 27, 2025 10:20 a.m. to 10:55 a.m. (AEDT)"
-    markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)(?:\s*\n[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s*[ap]\.?m\.?\s+to\s+\d{1,2}:\d{2}\s*[ap]\.?m\.?\s+\([A-Z]{3,5}\)){1,}/gi,
-      (
-        match,
-        month,
-        day,
-        year,
-        startHour,
-        startMinute,
-        startAmPm,
-        endHour,
-        endMinute,
-        endAmPm,
-      ) => {
-        const start24Hour = this.convert12To24Hour(parseInt(startHour), startAmPm);
-        const end24Hour = this.convert12To24Hour(parseInt(endHour), endAmPm);
-
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          start24Hour.toString(),
-          startMinute,
-        );
-        let endTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          end24Hour.toString(),
-          endMinute,
-        );
-
-        if (startTimestamp && endTimestamp) {
-          if (endTimestamp <= startTimestamp) {
-            endTimestamp += 86400;
-          }
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 12h-b: 12-hour time with am/pm (single line)
-    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)"
-    markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)/gi,
-      (
-        match,
-        month,
-        day,
-        year,
-        startHour,
-        startMinute,
-        startAmPm,
-        endHour,
-        endMinute,
-        endAmPm,
-      ) => {
-        const start24Hour = this.convert12To24Hour(parseInt(startHour), startAmPm);
-        const end24Hour = this.convert12To24Hour(parseInt(endHour), endAmPm);
-
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          start24Hour.toString(),
-          startMinute,
-        );
-        let endTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          end24Hour.toString(),
-          endMinute,
-        );
-
-        if (startTimestamp && endTimestamp) {
-          if (endTimestamp <= startTimestamp) {
-            endTimestamp += 86400;
-          }
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
-        }
-        return match;
-      },
-    );
-
-    // Preprocessing: Remove erroneous am/pm markers (24-hour format with am/pm is an error)
+    markdown = this.convert12HourPatterns(markdown);
     markdown = markdown.replace(/(\d{1,2}:\d{2})\s+(am|pm)/gi, "$1");
+    markdown = this.removeNonGmtTimezoneData(markdown);
+    markdown = this.parseGmtDatePatterns(markdown);
+    return markdown;
+  }
 
-    // Pattern 0a: Multiple timezone lines with time range and optional "From" prefix
-    // Example: "From Oct. 1, 2025 02:06 to 02:55 (GMT)  \nFrom Oct. 1, 2025 03:06 to 03:55 (BST)"
-    markdown = markdown.replace(
-      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n(?:From\s+)?[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+to\s+\d{1,2}:\d{2}\s+\([A-Z]{3,4}\)){1,}/gi,
-      (
-        match,
-        fromPrefix,
-        month,
-        day,
-        year,
-        startHour,
-        startMinute,
-        endHour,
-        endMinute,
-      ) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          startHour,
-          startMinute,
-        );
-        let endTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          endHour,
-          endMinute,
-        );
+  private removeNonGmtTimezoneData(text: string): string {
+    text = text.replace(
+      /(?:\s*\/\s*(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:\d{1,2}\s+)?(?:[A-Za-z]{3,9}\.?\s+)?(?:\d{1,2},?\s+)?(?:\d{4}\s+)?(?:at\s+(?:around\s+)?)?\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?\s+\((?!GMT)[A-Z]{2,5}\))+/gi,
+      "",
+    );
 
-        if (startTimestamp && endTimestamp) {
-          // If end time is before start time, it's the next day
-          if (endTimestamp <= startTimestamp) {
-            endTimestamp += 86400; // Add 24 hours
-          }
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          const prefix = fromPrefix ? "From " : "";
-          return `${prefix}<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
+    text = text.replace(
+      /^(?:From\s+)?(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}(?:\s+(?:at(?:\s+around)?|from))?\s+\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?(?:\s+(?:to|and)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+)?(?:at\s+(?:around\s+)?)?\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?)?\s+\((?!GMT)[A-Z]{2,5}\)\s*$/gm,
+      "",
+    );
+
+    text = text.replace(/\n{3,}/g, "\n\n");
+
+    return text;
+  }
+
+  private convert12HourPatterns(markdown: string): string {
+    return markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)/gi,
+      (match, month, day, year, startHour, startMinute, startAmPm, endHour, endMinute, endAmPm) => {
+        const start24 = this.convert12To24Hour(parseInt(startHour), startAmPm);
+        const end24 = this.convert12To24Hour(parseInt(endHour), endAmPm);
+        const startTs = this.parseDateTimeToTimestamp(day, month, year, start24.toString(), startMinute);
+        let endTs = this.parseDateTimeToTimestamp(day, month, year, end24.toString(), endMinute);
+        if (startTs && endTs) {
+          if (endTs <= startTs) endTs += 86400;
+          return this.formatTimeRange(startTs, endTs);
         }
         return match;
       },
     );
+  }
 
-    // Pattern 0b: Multiple timezone lines for same time with optional "From" prefix
-    // Example: "From Nov. 5, 2025 4:24 (GMT)  \nFrom Nov. 5, 2025 15:24 (AEDT)"
+  private parseGmtDatePatterns(markdown: string): string {
     markdown = markdown.replace(
-      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n(?:From\s+)?[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+\([A-Z]{3,4}\)){1,}/gi,
-      (match, fromPrefix, month, day, year, hour, minute) => {
-        const timestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          hour,
-          minute,
-        );
-        if (timestamp) {
-          const prefix = fromPrefix ? "From " : "";
-          return `${prefix}<t:${timestamp}:f>`;
-        }
+      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)\s+until\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, _sw, sd, sm, sy, sh, smin, _ew, ed, em, ey, eh, emin) => {
+        const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
+        const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
+        if (startTs && endTs) return `<t:${startTs}:F> until <t:${endTs}:F>`;
         return match;
       },
     );
 
-    // Pattern 0b2: Multiple timezone lines with "from" keyword (open-ended time)
-    // Example: "Nov. 11, 2025 from 10:00 (GMT)  \nNov. 11, 2025 from 21:00 (AEDT)"
-    markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+from\s+\d{1,2}:\d{2}\s+\([A-Z]{3,4}\)){1,}/gi,
-      (match, month, day, year, hour, minute) => {
-        const timestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          hour,
-          minute,
-        );
-        if (timestamp) {
-          return `From <t:${timestamp}:f>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 0c: Inline multiple timezone times with "/" separator (consolidate to single timestamp)
-    // Example: "Oct. 7, 2025 10:00 (GMT) / Oct. 7, 2025 11:00 (BST) / Oct. 7, 2025 21:00 (AEDT)"
-    markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+\([A-Z]{3,4}\)){1,}/gi,
-      (match, month, day, year, hour, minute) => {
-        const timestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          hour,
-          minute,
-        );
-        if (timestamp) {
-          return `<t:${timestamp}:f>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 0d: Weekday with time range using "until" with inline timezone alternatives
-    // Example: "Thursday, 6 November 2025 at 8:00 (GMT) / 19:00 (AEDT) until Thursday, 27 November 2025 at 14:59 (GMT) / Friday, 28 November 2025 at 1:59 (AEDT)"
-    markdown = markdown.replace(
-      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*\d{1,2}:\d{2}\s+\([^)]+\))?\s+until\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\s+at\s+\d{1,2}:\d{2}\s+\([^)]+\))?/gi,
-      (
-        match,
-        _startWeekday,
-        startDay,
-        startMonth,
-        startYear,
-        startHour,
-        startMinute,
-        _endWeekday,
-        endDay,
-        endMonth,
-        endYear,
-        endHour,
-        endMinute,
-      ) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          startDay,
-          startMonth,
-          startYear,
-          startHour,
-          startMinute,
-        );
-        const endTimestamp = this.parseDateTimeToTimestamp(
-          endDay,
-          endMonth,
-          endYear,
-          endHour,
-          endMinute,
-        );
-
-        if (startTimestamp && endTimestamp) {
-          return `<t:${startTimestamp}:F> until <t:${endTimestamp}:F>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 1: Full date with weekday and time
-    // Example: "Friday, 31 October at 11:00 (GMT) / 22:00 (AEDT)"
-    markdown = markdown.replace(
-      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*(\d{1,2}):(\d{2})\s+\([^)]+\))?/gi,
-      (match, _weekday, day, month, year, hour, minute) => {
-        const timestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year || new Date().getFullYear().toString(),
-          hour,
-          minute,
-        );
-        if (timestamp) {
-          return `<t:${timestamp}:F>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 2: Date with time range (no weekday)
-    // Example: "Sometime on Nov. 4, 2025 between 4:00 and 11:00 (GMT) / 15:00 and 22:00 (AEDT)"
-    markdown = markdown.replace(
-      /(Sometime\s+on\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+between\s+(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\([^)]+\))?/gi,
-      (
-        match,
-        prefix,
-        month,
-        day,
-        year,
-        startHour,
-        startMinute,
-        endHour,
-        endMinute,
-      ) => {
-        const dateTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          startHour,
-          startMinute,
-        );
-        const startTimeTimestamp = dateTimestamp;
-        const endTimeTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          endHour,
-          endMinute,
-        );
-
-        if (dateTimestamp && startTimeTimestamp && endTimeTimestamp) {
-          const prefixText = prefix ? prefix.trim() + " " : "";
-          const sameDay = this.isSameDay(startTimeTimestamp, endTimeTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          return `${prefixText}<t:${dateTimestamp}:f> and <t:${endTimeTimestamp}:${endFormat}>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 2a: Date range "to" with explicit end date (multi timezone lines)
-    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)\nNov. 21, 2025 17:00 to Dec. 1, 2025 19:00 (AEDT)"
-    markdown = markdown.replace(
-      /(From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\n(?:From\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+to\s+[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+\([A-Z]{3,5}\)){1,}/gi,
-      (
-        match,
-        fromPrefix,
-        startMonth,
-        startDay,
-        startYear,
-        startHour,
-        startMinute,
-        endMonth,
-        endDay,
-        endYear,
-        endHour,
-        endMinute,
-      ) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(startDay, startMonth, startYear, startHour, startMinute);
-        const endTimestamp = this.parseDateTimeToTimestamp(endDay, endMonth, endYear, endHour, endMinute);
-
-        if (startTimestamp && endTimestamp) {
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          const prefix = fromPrefix ? "From " : "";
-          return `${prefix}<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
-        }
-        return match;
-      },
-    );
-
-    // Pattern 2b: Date range "to" with explicit end date (single line)
-    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)"
     markdown = markdown.replace(
       /(From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
-      (
-        match,
-        fromPrefix,
-        startMonth,
-        startDay,
-        startYear,
-        startHour,
-        startMinute,
-        endMonth,
-        endDay,
-        endYear,
-        endHour,
-        endMinute,
-      ) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(startDay, startMonth, startYear, startHour, startMinute);
-        const endTimestamp = this.parseDateTimeToTimestamp(endDay, endMonth, endYear, endHour, endMinute);
+      (match, fromPrefix, sm, sd, sy, sh, smin, em, ed, ey, eh, emin) => {
+        const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
+        const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
+        if (startTs && endTs) return this.formatTimeRange(startTs, endTs, fromPrefix ? "From " : "");
+        return match;
+      },
+    );
 
-        if (startTimestamp && endTimestamp) {
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          const prefix = fromPrefix ? "From " : "";
-          return `${prefix}<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
+    markdown = markdown.replace(
+      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, fromPrefix, month, day, year, startHour, startMinute, endHour, endMinute) => {
+        const startTs = this.parseDateTimeToTimestamp(day, month, year, startHour, startMinute);
+        let endTs = this.parseDateTimeToTimestamp(day, month, year, endHour, endMinute);
+        if (startTs && endTs) {
+          if (endTs <= startTs) endTs += 86400;
+          return this.formatTimeRange(startTs, endTs, fromPrefix ? "From " : "");
         }
         return match;
       },
     );
 
-    // Pattern 3: Date with time range "to" (multi-line with AEDT)
-    // Example: "Nov. 4, 2025 7:00 to 8:00 (GMT)  \nNov. 4, 2025 18:00 to 19:00 (AEDT)"
     markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)\s*\n[A-Za-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s+\d{1,2}:\d{2}\s+to\s+\d{1,2}:\d{2}\s+\([^)]+\)/gi,
-      (match, month, day, year, startHour, startMinute, endHour, endMinute) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          startHour,
-          startMinute,
-        );
-        let endTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          endHour,
-          endMinute,
-        );
-
-        if (startTimestamp && endTimestamp) {
-          // If end time is before start time, it's the next day
-          if (endTimestamp <= startTimestamp) {
-            endTimestamp += 86400; // Add 24 hours
-          }
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
+      /(Sometime\s+on\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+between\s+(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, prefix, month, day, year, startHour, startMinute, endHour, endMinute) => {
+        const startTs = this.parseDateTimeToTimestamp(day, month, year, startHour, startMinute);
+        const endTs = this.parseDateTimeToTimestamp(day, month, year, endHour, endMinute);
+        if (startTs && endTs) {
+          const sameDay = this.isSameDay(startTs, endTs);
           const endFormat = sameDay ? "t" : "f";
-          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
+          const prefixText = prefix ? prefix.trim() + " " : "";
+          return `${prefixText}<t:${startTs}:f> and <t:${endTs}:${endFormat}>`;
         }
         return match;
       },
     );
 
-    // Pattern 3b: Date with time range "to" (single line)
-    // Example: "Nov. 4, 2025 7:00 to 8:00 (GMT)"
     markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
-      (match, month, day, year, startHour, startMinute, endHour, endMinute) => {
-        const startTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          startHour,
-          startMinute,
-        );
-        let endTimestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          endHour,
-          endMinute,
-        );
-
-        if (startTimestamp && endTimestamp) {
-          // If end time is before start time, it's the next day
-          if (endTimestamp <= startTimestamp) {
-            endTimestamp += 86400; // Add 24 hours
-          }
-          const sameDay = this.isSameDay(startTimestamp, endTimestamp);
-          const endFormat = sameDay ? "t" : "f";
-          return `<t:${startTimestamp}:f> to <t:${endTimestamp}:${endFormat}>`;
-        }
+      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, _weekday, day, month, year, hour, minute) => {
+        const ts = this.parseDateTimeToTimestamp(day, month, year || new Date().getFullYear().toString(), hour, minute);
+        if (ts) return `<t:${ts}:F>`;
         return match;
       },
     );
 
-    // Pattern 4: Date with single time (no weekday)
-    // Example: "Nov. 4, 2025 at 4:00 (GMT)"
     markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)(?:\s*\/\s*(\d{1,2}):(\d{2})\s+\([^)]+\))?/gi,
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (match, month, day, year, hour, minute) => {
-        const timestamp = this.parseDateTimeToTimestamp(
-          day,
-          month,
-          year,
-          hour,
-          minute,
-        );
-        if (timestamp) {
-          return `<t:${timestamp}:f> at <t:${timestamp}:t>`;
+        const ts = this.parseDateTimeToTimestamp(day, month, year, hour, minute);
+        if (ts) return `<t:${ts}:f>`;
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, month, day, year, hour, minute) => {
+        const ts = this.parseDateTimeToTimestamp(day, month, year, hour, minute);
+        if (ts) return `From <t:${ts}:f>`;
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
+      /(From\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, fromPrefix, month, day, year, hour, minute) => {
+        const ts = this.parseDateTimeToTimestamp(day, month, year, hour, minute);
+        if (ts) {
+          const prefix = fromPrefix ? "From " : "";
+          return `${prefix}<t:${ts}:f>`;
         }
         return match;
       },
     );
 
     return markdown;
+  }
+
+  private formatTimeRange(startTs: number, endTs: number, prefix: string = ""): string {
+    const sameDay = this.isSameDay(startTs, endTs);
+    const endFormat = sameDay ? "t" : "f";
+    return `${prefix}<t:${startTs}:f> to <t:${endTs}:${endFormat}>`;
   }
 
   private isSameDay(timestamp1: number, timestamp2: number): boolean {
@@ -773,235 +461,128 @@ export class HtmlToMarkdownConverter {
     return markdown.substring(0, cutLength).trimEnd() + "..." + suffix;
   }
 
-  /**
-   * Extract start and end timestamps from maintenance description HTML
-   * Returns an object with start_timestamp and end_timestamp (or null if not found)
-   */
   extractMaintenanceTimestamps(
     html: string,
   ): { start_timestamp: number | null; end_timestamp: number | null } {
-    const result = {
-      start_timestamp: null as number | null,
-      end_timestamp: null as number | null,
-    };
+    const result = { start_timestamp: null as number | null, end_timestamp: null as number | null };
 
-    // Convert HTML to plain text (rough conversion)
     let text = html.replace(/<br\s*\/?>/gi, "\n");
     text = text.replace(/<[^>]+>/g, " ");
     text = text.replace(/&nbsp;/g, " ");
+    text = this.removeNonGmtTimezoneData(text);
     text = text.replace(/\s+/g, " ");
 
-    // Pattern 0: 12-hour time with am/pm (intentional 12-hour format)
-    // Example: "Nov. 26, 2025 11:20 p.m. to 11:55 p.m. (GMT)"
     let match = text.match(
       /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+to\s+(\d{1,2}):(\d{2})\s*([ap])\.?m\.?\s+\(GMT\)/i,
     );
     if (match) {
-      const start24Hour = this.convert12To24Hour(parseInt(match[4]), match[6]);
-      const end24Hour = this.convert12To24Hour(parseInt(match[7]), match[9]);
-
-      const startTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        start24Hour.toString(),
-        match[5],
-      );
-      let endTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        end24Hour.toString(),
-        match[8],
-      );
-
-      if (startTimestamp && endTimestamp) {
-        if (endTimestamp <= startTimestamp) {
-          endTimestamp += 86400;
-        }
-        result.start_timestamp = startTimestamp;
-        result.end_timestamp = endTimestamp;
+      const start24 = this.convert12To24Hour(parseInt(match[4]), match[6]);
+      const end24 = this.convert12To24Hour(parseInt(match[7]), match[9]);
+      const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], start24.toString(), match[5]);
+      let endTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], end24.toString(), match[8]);
+      if (startTs && endTs) {
+        if (endTs <= startTs) endTs += 86400;
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
         return result;
       }
     }
 
-    // Remove erroneous am/pm markers (24-hour format with am/pm is an error)
     text = text.replace(/(\d{1,2}:\d{2})\s+(am|pm)/gi, "$1");
 
-    // Try multiple patterns to extract timestamps
-
-    // Pattern 1: Date range "to" with explicit end date
-    // Example: "Nov. 21, 2025 6:00 to Dec.1, 2025 8:00 (GMT)"
     match = text.match(
       /(?:From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
-      const startTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[4],
-        match[5],
-      );
-      const endTimestamp = this.parseDateTimeToTimestamp(
-        match[7],
-        match[6],
-        match[8],
-        match[9],
-        match[10],
-      );
-
-      if (startTimestamp && endTimestamp) {
-        result.start_timestamp = startTimestamp;
-        result.end_timestamp = endTimestamp;
+      const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      const endTs = this.parseDateTimeToTimestamp(match[7], match[6], match[8], match[9], match[10]);
+      if (startTs && endTs) {
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
         return result;
       }
     }
 
-    // Pattern 1b: Date with time range "to" same day with optional "From" prefix
-    // Example: "From Nov. 4, 2025 7:00 to 8:00 (GMT)" or "Oct. 1, 2025 02:06 to 02:55 (GMT)"
     match = text.match(
       /(?:From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
-      const startTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[4],
-        match[5],
-      );
-      let endTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[6],
-        match[7],
-      );
-
-      if (startTimestamp && endTimestamp) {
-        // If end time is before start time, it's the next day
-        if (endTimestamp <= startTimestamp) {
-          endTimestamp += 86400; // Add 24 hours
-        }
-        result.start_timestamp = startTimestamp;
-        result.end_timestamp = endTimestamp;
+      const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      let endTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[6], match[7]);
+      if (startTs && endTs) {
+        if (endTs <= startTs) endTs += 86400;
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
         return result;
       }
     }
 
-    // Pattern 2: Weekday with time range using "until"
-    // Example: "Thursday, 6 November 2025 at 8:00 (GMT) until Thursday, 27 November 2025 at 14:59 (GMT)"
     match = text.match(
       /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\).*?until.*?(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
-      const startTimestamp = this.parseDateTimeToTimestamp(
-        match[1],
-        match[2],
-        match[3],
-        match[4],
-        match[5],
-      );
-      const endTimestamp = this.parseDateTimeToTimestamp(
-        match[6],
-        match[7],
-        match[8],
-        match[9],
-        match[10],
-      );
-
-      if (startTimestamp && endTimestamp) {
-        result.start_timestamp = startTimestamp;
-        result.end_timestamp = endTimestamp;
+      const startTs = this.parseDateTimeToTimestamp(match[1], match[2], match[3], match[4], match[5]);
+      const endTs = this.parseDateTimeToTimestamp(match[6], match[7], match[8], match[9], match[10]);
+      if (startTs && endTs) {
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
         return result;
       }
     }
 
-    // Pattern 3: Date with time range "between...and"
-    // Example: "Nov. 4, 2025 between 4:00 and 11:00 (GMT)"
     match = text.match(
       /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+between\s+(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
-      const startTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[4],
-        match[5],
-      );
-      const endTimestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[6],
-        match[7],
-      );
-
-      if (startTimestamp && endTimestamp) {
-        result.start_timestamp = startTimestamp;
-        result.end_timestamp = endTimestamp;
+      const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      const endTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[6], match[7]);
+      if (startTs && endTs) {
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
         return result;
       }
     }
 
-    // Pattern 4: Full date with weekday and single time (no end time, just a start time)
-    // Example: "Friday, 31 October 2025 at 11:00 (GMT)"
     match = text.match(
       /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
-      const timestamp = this.parseDateTimeToTimestamp(
+      const ts = this.parseDateTimeToTimestamp(
         match[1],
         match[2],
         match[3] || new Date().getFullYear().toString(),
         match[4],
         match[5],
       );
-      if (timestamp) {
-        result.start_timestamp = timestamp;
-        // For single timestamp, we don't set end_timestamp
+      if (ts) {
+        result.start_timestamp = ts;
         return result;
       }
     }
 
-    // Pattern 5: Date with single time (no weekday, no end time)
-    // Example: "Nov. 4, 2025 at 4:00 (GMT)"
-    match = text.match(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
-    );
+    match = text.match(/([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+at\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i);
     if (match) {
-      const timestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[4],
-        match[5],
-      );
-      if (timestamp) {
-        result.start_timestamp = timestamp;
-        // For single timestamp, we don't set end_timestamp
+      const ts = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      if (ts) {
+        result.start_timestamp = ts;
         return result;
       }
     }
 
-    // Pattern 6: Date with "from" keyword (open-ended time)
-    // Example: "Nov. 11, 2025 from 10:00 (GMT)"
-    match = text.match(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
-    );
+    match = text.match(/([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i);
     if (match) {
-      const timestamp = this.parseDateTimeToTimestamp(
-        match[2],
-        match[1],
-        match[3],
-        match[4],
-        match[5],
-      );
-      if (timestamp) {
-        result.start_timestamp = timestamp;
-        // For "from" patterns, we don't set end_timestamp
+      const ts = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      if (ts) {
+        result.start_timestamp = ts;
+        return result;
+      }
+    }
+
+    match = text.match(/([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i);
+    if (match) {
+      const ts = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      if (ts) {
+        result.start_timestamp = ts;
         return result;
       }
     }
