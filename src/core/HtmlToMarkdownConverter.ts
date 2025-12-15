@@ -216,6 +216,19 @@ export class HtmlToMarkdownConverter {
     );
 
     markdown = markdown.replace(
+      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, month, day, year, startHour, startMinute, endHour, endMinute) => {
+        const startTs = this.parseDateTimeToTimestamp(day, month, year, startHour, startMinute);
+        let endTs = this.parseDateTimeToTimestamp(day, month, year, endHour, endMinute);
+        if (startTs && endTs) {
+          if (endTs <= startTs) endTs += 86400;
+          return this.formatTimeRange(startTs, endTs, "From ");
+        }
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
       /(Sometime\s+on\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+between\s+(\d{1,2}):(\d{2})\s+and\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (match, prefix, month, day, year, startHour, startMinute, endHour, endMinute) => {
         const startTs = this.parseDateTimeToTimestamp(day, month, year, startHour, startMinute);
@@ -505,6 +518,20 @@ export class HtmlToMarkdownConverter {
 
     match = text.match(
       /(?:From\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
+    );
+    if (match) {
+      const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);
+      let endTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[6], match[7]);
+      if (startTs && endTs) {
+        if (endTs <= startTs) endTs += 86400;
+        result.start_timestamp = startTs;
+        result.end_timestamp = endTs;
+        return result;
+      }
+    }
+
+    match = text.match(
+      /([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/i,
     );
     if (match) {
       const startTs = this.parseDateTimeToTimestamp(match[2], match[1], match[3], match[4], match[5]);

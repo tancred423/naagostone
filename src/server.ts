@@ -610,7 +610,7 @@ app.get("/lodestone/topics", async (context: Context) => {
     for (const topic of topicsArray) {
       topic.timestamp_live_letter = null;
       const title = topic.title as string | undefined;
-      if (title && /letter from the producer live/i.test(title)) {
+      if (title && /letter from the producer live/i.test(title) && !/digest/i.test(title)) {
         const description = topic.description as { markdown?: string } | undefined;
         if (description?.markdown) {
           topic.timestamp_live_letter = markdownConverter.extractLiveLetterTimestamp(description.markdown);
