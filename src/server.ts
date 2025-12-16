@@ -211,7 +211,11 @@ app.get("/character/search", async (context: Context) => {
   } catch (err: unknown) {
     const error = err as Error;
     log.error(`Character search error: ${error.message}`);
-    return context.json({ error: error.message }, 500);
+    if (error.message === "404") {
+      return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
+    } else return context.json({ error: error.message }, 500);
   }
 });
 
@@ -307,6 +311,8 @@ app.get("/character/:characterId", async (context: Context) => {
     log.error(`Character fetch error for ID ${characterId}: ${error.message}`);
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -624,6 +630,8 @@ app.get("/lodestone/topics", async (context: Context) => {
     log.error(`Topics fetch error: ${error.message}`);
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -688,6 +696,8 @@ app.get("/lodestone/notices", async (context: Context) => {
     const error = err as Error;
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -760,6 +770,8 @@ app.get("/lodestone/maintenances", async (context: Context) => {
     const error = err as Error;
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -812,6 +824,8 @@ app.get("/lodestone/updates", async (context: Context) => {
     const error = err as Error;
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -864,6 +878,8 @@ app.get("/lodestone/statuses", async (context: Context) => {
     const error = err as Error;
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
@@ -879,6 +895,8 @@ app.get("/lodestone/worldstatus", async (context: Context) => {
     log.error(`World status fetch error: ${error.message}`);
     if (error.message === "404") {
       return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
     } else return context.json({ error: error.message }, 500);
   }
 });
