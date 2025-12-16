@@ -155,7 +155,12 @@ export class HtmlToMarkdownConverter {
     );
 
     text = text.replace(
-      /^(?:From\s+)?(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}(?:\s+(?:at(?:\s+around)?|from))?\s+\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?(?:\s+(?:to|and)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+)?(?:at\s+(?:around\s+)?)?\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?)?\s+\((?!GMT)[A-Z]{2,5}\)\s*$/gm,
+      /\s*\/\s*\d{1,2}:\d{2}\s+\((?!GMT)[A-Z]{2,5}\)(?=\s+on\s+)/gi,
+      "",
+    );
+
+    text = text.replace(
+      /^(?:On\s+)?(?:From\s+)?(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}(?:\s+(?:at(?:\s+around)?|from))?\s+\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?(?:\s+(?:to|and)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:(?:\d{1,2}\s+)?[A-Za-z]{3,9}\.?\s*\d{1,2},?\s+\d{4}\s+)?(?:at\s+(?:around\s+)?)?\d{1,2}:\d{2}(?:\s*[ap]\.?m\.?)?)?\s+\((?!GMT)[A-Z]{2,5}\)\s*$/gm,
       "",
     );
 
@@ -216,7 +221,7 @@ export class HtmlToMarkdownConverter {
     );
 
     markdown = markdown.replace(
-      /([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      /(?:On\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})\s+from\s+(\d{1,2}):(\d{2})\s+to\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (match, month, day, year, startHour, startMinute, endHour, endMinute) => {
         const startTs = this.parseDateTimeToTimestamp(day, month, year, startHour, startMinute);
         let endTs = this.parseDateTimeToTimestamp(day, month, year, endHour, endMinute);
@@ -244,7 +249,7 @@ export class HtmlToMarkdownConverter {
     );
 
     markdown = markdown.replace(
-      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (match, _weekday, day, month, year, hour, minute) => {
         const ts = this.parseDateTimeToTimestamp(day, month, year || new Date().getFullYear().toString(), hour, minute);
         if (ts) return `<t:${ts}:F>`;
@@ -278,6 +283,15 @@ export class HtmlToMarkdownConverter {
           const prefix = fromPrefix ? "From " : "";
           return `${prefix}<t:${ts}:f>`;
         }
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
+      /(?:approximately\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)\s+on\s+([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/gi,
+      (match, hour, minute, month, day, year) => {
+        const ts = this.parseDateTimeToTimestamp(day, month, year, hour, minute);
+        if (ts) return `<t:${ts}:f>`;
         return match;
       },
     );
@@ -386,6 +400,8 @@ export class HtmlToMarkdownConverter {
 
       if (key.toLowerCase() === "date") {
         result.date = (result.date as number) * 1000;
+      } else if (key.toLowerCase() === "title" && typeof value === "string") {
+        result.title = this.decodeHtmlEntities(value);
       } else if (
         key.toLowerCase() === "description" && typeof value === "string"
       ) {
@@ -399,6 +415,16 @@ export class HtmlToMarkdownConverter {
     }
 
     return result;
+  }
+
+  private decodeHtmlEntities(text: string): string {
+    return text
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&nbsp;/g, " ");
   }
 
   private cutMessageAtMaxLength(
