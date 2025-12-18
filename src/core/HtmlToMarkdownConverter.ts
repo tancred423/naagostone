@@ -600,9 +600,23 @@ export class HtmlToMarkdownConverter {
     markdown = markdown.replace(/^・/gm, "* ");
     markdown = markdown.replace(/^■\s*/gm, "* ");
     markdown = markdown.replace(/\n・/g, "\n* ");
-    markdown = this.convertTitlesToDiscordFormat(markdown);
+    markdown = this.convertTitlesToV2Format(markdown);
     markdown = this.wrapSpecialUrlsInBackticks(markdown);
 
+    return markdown;
+  }
+
+  private convertTitlesToV2Format(markdown: string): string {
+    markdown = markdown.replace(/^#{1,6}\s+(.+)$/gm, "### $1");
+    markdown = markdown.replace(/^\[([^\]]+)\]\s*$/gm, "### $1");
+    markdown = this.normalizeSpacingAroundV2Titles(markdown);
+    return markdown;
+  }
+
+  private normalizeSpacingAroundV2Titles(markdown: string): string {
+    markdown = markdown.replace(/(### .+)\n\n+/g, "$1\n");
+    markdown = markdown.replace(/\n\n+(### .+)/g, "\n$1");
+    markdown = markdown.replace(/([^\n])\n(### .+)/g, "$1\n$2");
     return markdown;
   }
 
