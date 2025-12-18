@@ -188,21 +188,29 @@ export class HtmlToMarkdownConverter {
 
   private parseGmtDatePatterns(markdown: string): string {
     markdown = markdown.replace(
-      /From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s*\n+\s*(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
-      (match, sd, sm, sy, sh, smin, keyword, ed, em, ey, eh, emin) => {
+      /(\*{1,2})?From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\*{0,2}\s*\n+\s*\*{0,2}(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)(\*{1,2})?/gi,
+      (match, startBold, sd, sm, sy, sh, smin, keyword, ed, em, ey, eh, emin, endBold) => {
         const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
         const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
-        if (startTs && endTs) return `From <t:${startTs}:F>\n${keyword} <t:${endTs}:F>`;
+        if (startTs && endTs) {
+          const bold = startBold || "";
+          const boldEnd = endBold || "";
+          return `${bold}From <t:${startTs}:F>${boldEnd}\n${bold}${keyword} <t:${endTs}:F>${boldEnd}`;
+        }
         return match;
       },
     );
 
     markdown = markdown.replace(
-      /From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s*\n+\s*(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
-      (match, sm, sd, sy, sh, smin, keyword, em, ed, ey, eh, emin) => {
+      /(\*{1,2})?From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\*{0,2}\s*\n+\s*\*{0,2}(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)(\*{1,2})?/gi,
+      (match, startBold, sm, sd, sy, sh, smin, keyword, em, ed, ey, eh, emin, endBold) => {
         const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
         const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
-        if (startTs && endTs) return `From <t:${startTs}:F>\n${keyword} <t:${endTs}:F>`;
+        if (startTs && endTs) {
+          const bold = startBold || "";
+          const boldEnd = endBold || "";
+          return `${bold}From <t:${startTs}:F>${boldEnd}\n${bold}${keyword} <t:${endTs}:F>${boldEnd}`;
+        }
         return match;
       },
     );
