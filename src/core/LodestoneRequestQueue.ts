@@ -8,6 +8,7 @@ interface QueuedRequest {
   reject: (error: Error) => void;
   queuedAt: number;
   priority: number;
+  cacheType?: CacheType;
 }
 
 interface CachedResponse {
@@ -17,7 +18,7 @@ interface CachedResponse {
   cachedAt: number;
 }
 
-type CacheType = "news" | "maintenance" | "updates" | "status";
+export type CacheType = "maintenances" | "updates" | "statuses" | "notices";
 
 export enum RequestPriority {
   HIGH = 1, // Character search, character by ID - user-facing, needs fast response
@@ -40,27 +41,19 @@ export class LodestoneRequestQueue {
     this.delayBetweenRequests = delayBetweenRequests;
     this.maxCacheSizePerType = maxCacheSizePerType;
     this.caches = new Map([
-      ["news", new Map()],
-      ["maintenance", new Map()],
+      ["maintenances", new Map()],
       ["updates", new Map()],
-      ["status", new Map()],
+      ["statuses", new Map()],
+      ["notices", new Map()],
     ]);
-  }
-
-  private getCacheType(url: string): CacheType | null {
-    if (url.includes("/news/detail/")) return "news";
-    if (url.includes("/maintenance/detail/")) return "maintenance";
-    if (url.includes("/updates/detail/")) return "updates";
-    if (url.includes("/status/detail/")) return "status";
-    return null;
   }
 
   fetchWithTimeout(
     url: string,
     options: FetchOptions = {},
     priority: number = RequestPriority.NORMAL,
+    cacheType?: CacheType,
   ): Promise<Response> {
-    const cacheType = this.getCacheType(url);
     if (cacheType) {
       const cache = this.caches.get(cacheType)!;
       const cached = cache.get(url);
@@ -83,6 +76,7 @@ export class LodestoneRequestQueue {
         reject,
         queuedAt: Date.now(),
         priority,
+        cacheType,
       };
 
       const insertIndex = this.queue.findIndex((req) => req.priority > priority);
@@ -143,10 +137,9 @@ export class LodestoneRequestQueue {
 
         this.lastRequestTime = Date.now();
 
-        const cacheType = this.getCacheType(request.url);
-        if (response.ok && cacheType) {
+        if (response.ok && request.cacheType) {
           const body = await response.text();
-          this.addToCache(cacheType, request.url, {
+          this.addToCache(request.cacheType, request.url, {
             body,
             status: response.status,
             headers: new Headers(response.headers),

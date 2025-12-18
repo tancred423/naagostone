@@ -681,7 +681,7 @@ app.get("/lodestone/notices", async (context: Context) => {
     } as Record<string, unknown>;
 
     const detailsPromises = top10Notices
-      .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string, RequestPriority.LOW));
+      .map((notice) => noticesDetailsParser.parse(context, "", notice.link as string, RequestPriority.LOW, "notices"));
     const detailsResults = await Promise.all(detailsPromises);
 
     top10Notices.forEach(
@@ -740,6 +740,7 @@ app.get("/lodestone/maintenances", async (context: Context) => {
         "",
         (maintenance as Record<string, unknown>)?.link as string,
         RequestPriority.LOW,
+        "maintenances",
       )
     );
     const detailsResults = await Promise.all(detailsPromises);
@@ -809,7 +810,7 @@ app.get("/lodestone/updates", async (context: Context) => {
     parsed.updates = resArray;
 
     const detailsPromises = (parsed.updates as Array<Record<string, unknown>>)
-      .map((update) => updatesDetailsParser.parse(context, "", update.link as string, RequestPriority.LOW));
+      .map((update) => updatesDetailsParser.parse(context, "", update.link as string, RequestPriority.LOW, "updates"));
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.updates as Array<Record<string, unknown>>).forEach(
@@ -863,7 +864,9 @@ app.get("/lodestone/statuses", async (context: Context) => {
     parsed.statuses = resArray;
 
     const detailsPromises = (parsed.statuses as Array<Record<string, unknown>>)
-      .map((statusItem) => statusDetailsParser.parse(context, "", statusItem.link as string, RequestPriority.LOW));
+      .map((statusItem) =>
+        statusDetailsParser.parse(context, "", statusItem.link as string, RequestPriority.LOW, "statuses")
+      );
     const detailsResults = await Promise.all(detailsPromises);
 
     (parsed.statuses as Array<Record<string, unknown>>).forEach(
