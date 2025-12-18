@@ -1,5 +1,30 @@
 import TurndownService from "turndown";
 
+interface TextDisplayComponent {
+  type: "textDisplay";
+  content: string;
+}
+
+interface MediaGalleryComponent {
+  type: "mediaGallery";
+  urls: string[];
+}
+
+interface SeparatorComponent {
+  type: "separator";
+}
+
+interface StreamComponent {
+  type: "stream";
+  url: string;
+}
+
+type DiscordComponent = TextDisplayComponent | MediaGalleryComponent | SeparatorComponent | StreamComponent;
+
+interface DiscordComponentsV2 {
+  components: DiscordComponent[];
+}
+
 export class HtmlToMarkdownConverter {
   private turndownService: TurndownService;
 
@@ -436,6 +461,7 @@ export class HtmlToMarkdownConverter {
         result.description = {
           html: value,
           markdown: this.convert(value, link),
+          discord_components_v2: this.parseToDiscordComponents(value, link),
         };
       } else if (typeof value === "object" && value !== null) {
         result[key] = this.addMarkdownFields(value);
@@ -443,6 +469,153 @@ export class HtmlToMarkdownConverter {
     }
 
     return result;
+  }
+
+  private parseToDiscordComponents(html: string, link?: string): DiscordComponentsV2 {
+    const components: DiscordComponent[] = [];
+    let workingHtml = html;
+
+    workingHtml = workingHtml.replace(
+      /<a[^>]*class="news__list--img"[^>]*>.*?<\/a>/gis,
+      "",
+    );
+
+    workingHtml = this.replaceIframesWithLinks(workingHtml);
+
+    const parts = workingHtml.split(/<hr\s*\/?>/gi);
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (i > 0) {
+        components.push({ type: "separator" });
+      }
+
+      this.parseHtmlPartToComponents(part, components, link);
+    }
+
+    this.mergeAdjacentTextComponents(components);
+
+    return { components };
+  }
+
+  private parseHtmlPartToComponents(
+    html: string,
+    components: DiscordComponent[],
+    link?: string,
+  ): void {
+    const imgPattern = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi;
+    const streamPattern = /<p>Stream:\s*(https?:\/\/[^\s<]+)<\/p>/gi;
+
+    let lastIndex = 0;
+    let currentImages: string[] = [];
+
+    const allMatches: Array<{ index: number; length: number; type: "image" | "stream"; data: string }> = [];
+
+    let match;
+    while ((match = imgPattern.exec(html)) !== null) {
+      allMatches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "image",
+        data: match[1],
+      });
+    }
+
+    while ((match = streamPattern.exec(html)) !== null) {
+      allMatches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "stream",
+        data: match[1],
+      });
+    }
+
+    allMatches.sort((a, b) => a.index - b.index);
+
+    for (const item of allMatches) {
+      if (item.type === "image") {
+        if (currentImages.length === 0) {
+          const textBefore = html.substring(lastIndex, item.index);
+          this.addTextComponent(textBefore, components, link);
+        }
+        currentImages.push(item.data);
+        lastIndex = item.index + item.length;
+      } else if (item.type === "stream") {
+        if (currentImages.length > 0) {
+          components.push({ type: "mediaGallery", urls: currentImages });
+          currentImages = [];
+        }
+
+        const textBefore = html.substring(lastIndex, item.index);
+        this.addTextComponent(textBefore, components, link);
+
+        components.push({ type: "stream", url: item.data });
+        lastIndex = item.index + item.length;
+      }
+    }
+
+    if (currentImages.length > 0) {
+      components.push({ type: "mediaGallery", urls: currentImages });
+      currentImages = [];
+    }
+
+    const remainingText = html.substring(lastIndex);
+    this.addTextComponent(remainingText, components, link);
+  }
+
+  private addTextComponent(
+    html: string,
+    components: DiscordComponent[],
+    _link?: string,
+  ): void {
+    if (!html.trim()) return;
+
+    let markdown = this.turndownService.turndown(html);
+    markdown = this.cleanupMarkdownForComponents(markdown);
+    markdown = this.convertDatesToDiscordTimestamps(markdown);
+    markdown = markdown.trim();
+
+    if (markdown) {
+      components.push({ type: "textDisplay", content: markdown });
+    }
+  }
+
+  private cleanupMarkdownForComponents(markdown: string): string {
+    markdown = markdown
+      .replaceAll("\\", "")
+      .replaceAll("](/lodestone", "](https://eu.finalfantasyxiv.com/lodestone");
+
+    markdown = markdown.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      (_match: string, text: string, url: string) => {
+        if (text === url || text.trim() === url.trim()) {
+          return url;
+        }
+        return _match;
+      },
+    );
+
+    markdown = markdown.replace(/\s*\n\s*\n\s*/g, "\n\n");
+    markdown = markdown.replace(/(\n\s*){3,}/g, "\n\n");
+    markdown = markdown.replace(/^・/gm, "* ");
+    markdown = markdown.replace(/^■\s*/gm, "* ");
+    markdown = markdown.replace(/\n・/g, "\n* ");
+    markdown = this.convertTitlesToDiscordFormat(markdown);
+    markdown = this.wrapSpecialUrlsInBackticks(markdown);
+
+    return markdown;
+  }
+
+  private mergeAdjacentTextComponents(components: DiscordComponent[]): void {
+    for (let i = components.length - 1; i > 0; i--) {
+      const current = components[i];
+      const previous = components[i - 1];
+
+      if (current.type === "textDisplay" && previous.type === "textDisplay") {
+        (previous as TextDisplayComponent).content += "\n\n" + (current as TextDisplayComponent).content;
+        components.splice(i, 1);
+      }
+    }
   }
 
   private decodeHtmlEntities(text: string): string {
