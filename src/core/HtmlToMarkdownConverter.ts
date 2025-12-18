@@ -188,6 +188,26 @@ export class HtmlToMarkdownConverter {
 
   private parseGmtDatePatterns(markdown: string): string {
     markdown = markdown.replace(
+      /From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s*\n+\s*(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?(\d{1,2})\s+([A-Za-z]{3,9})\.?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, sd, sm, sy, sh, smin, keyword, ed, em, ey, eh, emin) => {
+        const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
+        const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
+        if (startTs && endTs) return `From <t:${startTs}:F>\n${keyword} <t:${endTs}:F>`;
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
+      /From\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s*\n+\s*(Until|To)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),?\s+)?([A-Za-z]{3,9})\.?\s*(\d{1,2}),?\s+(\d{4})(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
+      (match, sm, sd, sy, sh, smin, keyword, em, ed, ey, eh, emin) => {
+        const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
+        const endTs = this.parseDateTimeToTimestamp(ed, em, ey, eh, emin);
+        if (startTs && endTs) return `From <t:${startTs}:F>\n${keyword} <t:${endTs}:F>`;
+        return match;
+      },
+    );
+
+    markdown = markdown.replace(
       /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)\s+until\s+(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\s+at\s+(?:around\s+)?(\d{1,2}):(\d{2})\s+\(GMT\)/gi,
       (match, _sw, sd, sm, sy, sh, smin, _ew, ed, em, ey, eh, emin) => {
         const startTs = this.parseDateTimeToTimestamp(sd, sm, sy, sh, smin);
