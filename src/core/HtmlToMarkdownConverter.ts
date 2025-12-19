@@ -37,13 +37,21 @@ export class HtmlToMarkdownConverter {
   }
 
   convert(html: string, link?: string): string {
-    const processedHtml = this.replaceIframesWithLinks(html);
+    let processedHtml = this.replaceIframesWithLinks(html);
+    processedHtml = this.preprocessHtml(processedHtml);
     let markdown = this.turndownService.turndown(processedHtml);
     markdown = this.cleanupMarkdown(markdown);
     markdown = this.convertDatesToDiscordTimestamps(markdown);
     markdown = this.cutMessageAtMaxLength(markdown, link);
 
     return markdown.trim();
+  }
+
+  private preprocessHtml(html: string): string {
+    html = html.replace(/<(h[1-6])[^>]*>\s*<\/\1>/gi, "");
+    html = html.replace(/<br\s*\/?>\s*<\/li>/gi, "</li>");
+    html = html.replace(/<(strong|em|b|i)>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/\1>/gi, "<$1>$2</$1>");
+    return html;
   }
 
   private replaceIframesWithLinks(html: string): string {
@@ -86,6 +94,8 @@ export class HtmlToMarkdownConverter {
       },
     );
 
+    markdown = markdown.replace(/\*\*\s*\n+([A-Za-z][^\n]{0,50})\n+\*\*/g, "**$1**");
+    markdown = markdown.replace(/(\*\s+[^\n]+)\n\n+(\*\s+)/g, "$1\n$2");
     markdown = markdown.replace(/\s*\n\s*\n\s*/g, "\n\n");
     markdown = markdown.replace(/(\n\s*){3,}/g, "\n\n");
     markdown = markdown.replace(/^・/gm, "* ");
@@ -570,14 +580,24 @@ export class HtmlToMarkdownConverter {
   ): void {
     if (!html.trim()) return;
 
+    html = this.preprocessHtmlForV2(html);
     let markdown = this.turndownService.turndown(html);
     markdown = this.cleanupMarkdownForComponents(markdown);
     markdown = this.convertDatesToDiscordTimestamps(markdown);
+    // Final pass after timestamp conversion: ensure single newline before ### headings
+    markdown = markdown.replace(/\n\n+(###)/g, "\n$1");
     markdown = markdown.trim();
 
     if (markdown) {
       components.push({ type: "textDisplay", content: markdown });
     }
+  }
+
+  private preprocessHtmlForV2(html: string): string {
+    html = html.replace(/<(h[1-6])[^>]*>\s*<\/\1>/gi, "");
+    html = html.replace(/<br\s*\/?>\s*<\/li>/gi, "</li>");
+    html = html.replace(/<(strong|em|b|i)>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/\1>/gi, "<$1>$2</$1>");
+    return html;
   }
 
   private cleanupMarkdownForComponents(markdown: string): string {
@@ -595,8 +615,10 @@ export class HtmlToMarkdownConverter {
       },
     );
 
-    markdown = markdown.replace(/\s*\n\s*\n\s*/g, "\n\n");
-    markdown = markdown.replace(/(\n\s*){3,}/g, "\n\n");
+    markdown = markdown.replace(/\*\*\s*\n+([A-Za-z][^\n]{0,50})\n+\*\*/g, "**$1**");
+    markdown = markdown.replace(/(\*\s+[^\n]+)\n\n+(\*\s+)/g, "$1\n$2");
+    markdown = markdown.replace(/[ \t]+$/gm, "");
+    markdown = markdown.replace(/\n\n+/g, "\n\n");
     markdown = markdown.replace(/^・/gm, "* ");
     markdown = markdown.replace(/^■\s*/gm, "* ");
     markdown = markdown.replace(/\n・/g, "\n* ");
@@ -614,9 +636,9 @@ export class HtmlToMarkdownConverter {
   }
 
   private normalizeSpacingAroundV2Titles(markdown: string): string {
-    markdown = markdown.replace(/(### .+)\n\n+/g, "$1\n");
-    markdown = markdown.replace(/\n\n+(### .+)/g, "\n$1");
-    markdown = markdown.replace(/([^\n])\n(### .+)/g, "$1\n$2");
+    markdown = markdown.replace(/(### [^\n]+)[\r\n]+/g, "$1\n");
+    markdown = markdown.replace(/[\r\n]{2,}(### )/g, "\n$1");
+    markdown = markdown.replace(/([^\r\n])(### [^\n]+)/g, "$1\n$2");
     return markdown;
   }
 
