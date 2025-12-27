@@ -20,6 +20,7 @@ import { StatusDetails } from "./parser/news/StatusDetails.ts";
 import { RequestPriority } from "./core/LodestoneRequestQueue.ts";
 import { FreeCompany } from "./parser/freecompany/FreeCompany.ts";
 import { WorldStatus } from "./parser/worldstatus/WorldStatus.ts";
+import { getEventTimeframe as getEventInfo } from "./parser/news/EventTimeframeParser.ts";
 
 await load({ export: true });
 
@@ -138,7 +139,7 @@ app.get("/", (context: Context) => {
         topics: {
           method: "GET",
           path: "/lodestone/topics",
-          description: "Get topics with details",
+          description: "Get topics with details. Possible event types: 'Special Event' | 'Moogle Treasure Trove'",
         },
         notices: {
           method: "GET",
@@ -620,6 +621,18 @@ app.get("/lodestone/topics", async (context: Context) => {
         const description = topic.description as { markdown?: string } | undefined;
         if (description?.markdown) {
           topic.timestamp_live_letter = markdownConverter.extractLiveLetterTimestamp(description.markdown);
+        }
+      }
+
+      topic.event = null;
+      const topicDescription = topic.description as { html?: string; markdown?: string } | undefined;
+      if (topicDescription) {
+        try {
+          const eventInfo = await getEventInfo(topicDescription);
+          topic.event = eventInfo;
+        } catch (error) {
+          log.debug(`Failed to parse event timeframe for topic: ${error}`);
+          topic.event = null;
         }
       }
     }
