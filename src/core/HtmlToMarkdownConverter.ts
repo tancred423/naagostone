@@ -880,7 +880,7 @@ export class HtmlToMarkdownConverter {
     return result;
   }
 
-  extractLiveLetterTimestamp(markdown: string): number | null {
+  public extractLiveLetterTimestamp(markdown: string): number | null {
     const dateTimeSection = markdown.match(/Date\s*&\s*Time.*?<t:(\d+):/is);
     if (dateTimeSection && dateTimeSection[1]) {
       const timestamp = parseInt(dateTimeSection[1], 10);
