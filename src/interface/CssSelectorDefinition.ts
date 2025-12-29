@@ -3,4 +3,5 @@ export interface CssSelectorDefinition {
   multiple?: boolean;
   attribute?: string;
   regex?: string;
+  alwaysInclude?: boolean;
 }

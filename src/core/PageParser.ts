@@ -203,7 +203,7 @@ export abstract class PageParser {
       const element = document.querySelector(definition.selector as string);
       const data = this.handleElement(element as Element, definition);
       return {
-        isPatch: typeof data === "object",
+        isPatch: typeof data === "object" && data !== null,
         data,
       };
     }
@@ -217,11 +217,14 @@ export abstract class PageParser {
       isPatch: false,
       data: Object.keys(definition).reduce<Record<string, unknown> | null>(
         (acc, key) => {
+          const fieldDefinition = this.getDefinition(definition, key);
           const parsed = this.handleColumn(
-            this.getDefinition(definition, key),
+            fieldDefinition,
             document,
           );
-          if (parsed.data) {
+          const alwaysInclude = fieldDefinition && this.isDefinition(fieldDefinition as CssSelectorDefinition) &&
+            (fieldDefinition as CssSelectorDefinition & { alwaysInclude?: boolean }).alwaysInclude;
+          if (parsed.data || alwaysInclude) {
             if (parsed.isPatch) {
               return {
                 ...(acc || {}),
@@ -278,15 +281,22 @@ export abstract class PageParser {
         .replace(/\\f\\n\\r\\t\\v/gm, "\\s\\f\\n\\r\\t\\v&nbsp;");
       const match = new RegExp(regex).exec(res);
       if (match) {
+        const entries = Object.entries<string>(match.groups as Record<string, string>)
+          .filter(([, v]) => v !== undefined);
+
+        if (entries.length === 1) {
+          const [, value] = entries[0];
+          const isLargeNumber = /^\d+$/.test(value) && value.length > 15;
+          if (isLargeNumber) {
+            return value;
+          }
+          const numValue = +value;
+          return isNaN(numValue) ? value : numValue;
+        }
+
         return (
-          Object.entries<string>(match.groups as Record<string, string>).reduce(
+          entries.reduce(
             (acc, [key, value]) => {
-              if (value === undefined) {
-                return acc;
-              }
-              // Keep very large numbers as strings to preserve precision (e.g., free company IDs)
-              // Numbers larger than MAX_SAFE_INTEGER (2^53 - 1 = 9007199254740991) lose precision
-              // Check string length first to avoid precision loss during conversion
               const isLargeNumber = /^\d+$/.test(value) && value.length > 15;
               if (isLargeNumber) {
                 return {
