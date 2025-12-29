@@ -126,7 +126,7 @@ const SAVAGE_ACHIEVEMENTS: Record<string, { expansion: keyof SavageProgression; 
     },
     "Savage Paradise Found I": { expansion: "shb", raid: "edens_gate", release_date: "July 30, 2019" },
     "Savage Trouble in Paradise I": { expansion: "shb", raid: "edens_verse", release_date: "February 18, 2020" },
-    "Paradise Within Thee I": { expansion: "shb", raid: "edens_promise", release_date: "December 8, 2020" },
+    "Savage Paradise Within Thee I": { expansion: "shb", raid: "edens_promise", release_date: "December 8, 2020" },
     "Could Be Savage I": { expansion: "ew", raid: "pandaemonium_asphodelos", release_date: "January 4, 2022" },
     "Savage Gaze of the Abyss I": { expansion: "ew", raid: "pandaemonium_abyssos", release_date: "August 30, 2022" },
     "Apotheosis Agria I": { expansion: "ew", raid: "pandaemonium_anabaseios", release_date: "May 30, 2023" },
