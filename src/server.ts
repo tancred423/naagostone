@@ -6,6 +6,7 @@ import { HtmlToMarkdownConverter } from "./core/HtmlToMarkdownConverter.ts";
 import { Character } from "./parser/character/Character.ts";
 import { ItemLevel } from "./parser/character/ItemLevel.ts";
 import { CharacterSearch } from "./parser/character/CharacterSearch.ts";
+import { RaidProgression } from "./parser/character/RaidProgression.ts";
 import { RateLimiter } from "./middleware/RateLimiter.ts";
 import { InputValidator } from "./middleware/InputValidator.ts";
 import { Topics } from "./parser/news/Topics.ts";
@@ -178,6 +179,7 @@ app.get("/favicon.ico", (context: Context) => {
 const characterParser = new Character();
 const characterSearch = new CharacterSearch();
 const freeCompanyParser = new FreeCompany();
+const raidProgressionParser = new RaidProgression();
 const topicsParser = new Topics();
 const noticesParser = new Notices();
 const noticesDetailsParser = new NoticesDetails();
@@ -301,9 +303,21 @@ app.get("/character/:characterId", async (context: Context) => {
         }
       } catch (err: unknown) {
         const error = err as Error;
-        // Log but don't fail the request if free company tag fetch fails
         log.warn(`Failed to fetch free company tag for ID "${freeCompany.id}": ${error.message}`);
       }
+    }
+
+    try {
+      const raidProgression = await raidProgressionParser.parse(context);
+      if (raidProgression) {
+        (parsed.character as Record<string, unknown>).raid_progression = raidProgression;
+      } else {
+        (parsed.character as Record<string, unknown>).raid_progression = null;
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      log.warn(`Failed to fetch raid progression for character ${characterId}: ${error.message}`);
+      (parsed.character as Record<string, unknown>).raid_progression = null;
     }
 
     return context.json(parsed);
