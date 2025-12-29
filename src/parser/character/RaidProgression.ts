@@ -29,7 +29,7 @@ interface SavageProgression {
   hw: {
     alexander_gordias: RaidClear;
     alexander_midas: RaidClear;
-    alexander: RaidClear;
+    alexander_the_creator: RaidClear;
   };
   sb: {
     omega_deltascape: RaidClear;
@@ -104,7 +104,11 @@ const SAVAGE_ACHIEVEMENTS: Record<string, { expansion: keyof SavageProgression; 
     "Out of a Bind I": { expansion: "arr", raid: "the_final_coil_of_bahamut", release_date: "October 28, 2014" },
     "Sins of the Savage Father I": { expansion: "hw", raid: "alexander_gordias", release_date: "July 21, 2015" },
     "Sins of the Savage Son I": { expansion: "hw", raid: "alexander_midas", release_date: "February 23, 2016" },
-    "Sins of the Savage Creator I": { expansion: "hw", raid: "alexander", release_date: "September 27, 2016" },
+    "Sins of the Savage Creator I": {
+      expansion: "hw",
+      raid: "alexander_the_creator",
+      release_date: "September 27, 2016",
+    },
     "I Am the Savage Delta, I Am the Savage Omega I": {
       expansion: "sb",
       raid: "omega_deltascape",
@@ -217,7 +221,7 @@ export class RaidProgression {
       hw: {
         alexander_gordias: createEmptyClear(),
         alexander_midas: createEmptyClear(),
-        alexander: createEmptyClear(),
+        alexander_the_creator: createEmptyClear(),
       },
       sb: {
         omega_deltascape: createEmptyClear(),
