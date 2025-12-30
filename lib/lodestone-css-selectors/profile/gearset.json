@@ -40,6 +40,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -107,6 +111,10 @@
     },
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
@@ -176,6 +184,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -243,6 +255,10 @@
     },
     "COLOR_NAME2": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div.stain:nth-child(2) > a:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
@@ -312,6 +328,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -379,6 +399,10 @@
     },
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
@@ -448,6 +472,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -515,6 +543,10 @@
     },
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
@@ -584,6 +616,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -651,6 +687,10 @@
     },
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
@@ -720,6 +760,10 @@
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
     },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
+    },
     "MATERIA_1": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
@@ -787,6 +831,10 @@
     },
     "AMOUNT_DYE_SLOTS": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1)"
+    },
+    "MATERIA_SLOTS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li",
+      "multiple": true
     },
     "MATERIA_1": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
