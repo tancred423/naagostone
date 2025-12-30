@@ -66,21 +66,37 @@ export class Character extends PageParser {
       }
       const materiaSlots = gear["materia_slots"] as unknown[] | null | undefined;
       const slotCount = Array.isArray(materiaSlots) ? materiaSlots.length : 0;
+      const materiaKeys = new Set<string>();
+      for (let i = 1; i <= 5; i++) {
+        materiaKeys.add(`materia_${i}`);
+        materiaKeys.add(`materia_${i}_stats`);
+        materiaKeys.add(`materia_${i}_slot_class`);
+      }
+      materiaKeys.add("materia_slots");
+      const reorderedGear: Record<string, unknown> = {};
+      for (const key of Object.keys(gear)) {
+        if (!materiaKeys.has(key)) {
+          reorderedGear[key] = gear[key];
+        }
+      }
       for (let i = 1; i <= 5; i++) {
         const materiaKey = `materia_${i}`;
         const materiaStatsKey = `materia_${i}_stats`;
+        const materiaOvermeldKey = `materia_${i}_is_overmeld`;
+        const slotClassKey = `materia_${i}_slot_class`;
         const existingMateria = gear[materiaKey];
+        const slotClass = gear[slotClassKey] as string | null | undefined;
         if (i <= slotCount) {
-          if (!existingMateria) {
-            gear[materiaKey] = "empty";
-            gear[materiaStatsKey] = "empty";
-          }
+          reorderedGear[materiaKey] = existingMateria || "empty";
+          reorderedGear[materiaStatsKey] = gear[materiaStatsKey] || "empty";
+          reorderedGear[materiaOvermeldKey] = slotClass?.includes("forbidden") ?? false;
         } else {
-          gear[materiaKey] = null;
-          gear[materiaStatsKey] = null;
+          reorderedGear[materiaKey] = null;
+          reorderedGear[materiaStatsKey] = null;
+          reorderedGear[materiaOvermeldKey] = null;
         }
       }
-      delete gear["materia_slots"];
+      result[gearSlot] = reorderedGear;
     }
     return result;
   }

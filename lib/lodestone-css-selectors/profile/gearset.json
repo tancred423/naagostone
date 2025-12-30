@@ -48,21 +48,41 @@
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--0 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -120,21 +140,41 @@
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--1 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -192,21 +232,41 @@
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) >  ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--2 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -264,21 +324,41 @@
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--3 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -336,21 +416,41 @@
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--4 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -408,21 +508,41 @@
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--6 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -480,21 +600,41 @@
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--7 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -552,21 +692,41 @@
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--8 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -624,21 +784,41 @@
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--9 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -696,21 +876,41 @@
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--10 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -768,21 +968,41 @@
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--11 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
@@ -840,21 +1060,41 @@
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1) > div:nth-child(2)",
       "regex": "(?P<materia_1>.*)<br.*\">(?P<materia_1_stats>.*)</span>"
     },
+    "MATERIA_1_SLOT_CLASS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(1)",
+      "attribute": "class"
+    },
     "MATERIA_2": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2) > div:nth-child(2)",
       "regex": "(?P<materia_2>.*)<br.*\">(?P<materia_2_stats>.*)</span>"
+    },
+    "MATERIA_2_SLOT_CLASS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(2)",
+      "attribute": "class"
     },
     "MATERIA_3": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3) > div:nth-child(2)",
       "regex": "(?P<materia_3>.*)<br.*\">(?P<materia_3_stats>.*)</span>"
     },
+    "MATERIA_3_SLOT_CLASS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(3)",
+      "attribute": "class"
+    },
     "MATERIA_4": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4) > div:nth-child(2)",
       "regex": "(?P<materia_4>.*)<br.*\">(?P<materia_4_stats>.*)</span>"
     },
+    "MATERIA_4_SLOT_CLASS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(4)",
+      "attribute": "class"
+    },
     "MATERIA_5": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5) > div:nth-child(2)",
       "regex": "(?P<materia_5>.*)<br.*\">(?P<materia_5_stats>.*)</span>"
+    },
+    "MATERIA_5_SLOT_CLASS": {
+      "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > ul.db-tooltip__materia > li:nth-child(5)",
+      "attribute": "class"
     },
     "TYPE": {
       "selector": ".icon-c--12 > .db-tooltip > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > p:nth-child(4)"
