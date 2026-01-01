@@ -544,10 +544,17 @@ export class HtmlToMarkdownConverter {
 
     for (const item of allMatches) {
       if (item.type === "image") {
+        const textBetween = html.substring(lastIndex, item.index);
+        const hasTextContent = textBetween.replace(/<[^>]*>/g, "").trim().length > 0;
+
         if (currentImages.length === 0) {
-          const textBefore = html.substring(lastIndex, item.index);
-          this.addTextComponent(textBefore, components, link);
+          this.addTextComponent(textBetween, components, link);
+        } else if (hasTextContent) {
+          components.push({ type: "mediaGallery", urls: currentImages });
+          currentImages = [];
+          this.addTextComponent(textBetween, components, link);
         }
+
         currentImages.push(item.data);
         lastIndex = item.index + item.length;
       } else if (item.type === "stream") {
