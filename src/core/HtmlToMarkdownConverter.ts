@@ -644,7 +644,7 @@ export class HtmlToMarkdownConverter {
 
   private normalizeSpacingAroundV2Titles(markdown: string): string {
     markdown = markdown.replace(/(### [^\n]+)[\r\n]+/g, "$1\n");
-    markdown = markdown.replace(/[\r\n]{2,}(### )/g, "\n$1");
+    markdown = markdown.replace(/\n(?:[ \t\u3000\u00A0]*\n)+(### )/g, "\n$1");
     markdown = markdown.replace(/([^\r\n])(### [^\n]+)/g, "$1\n$2");
     return markdown;
   }
