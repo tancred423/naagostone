@@ -101,7 +101,16 @@ export async function checkEventUrl(shortUrl: string): Promise<{ url: string; ty
 
     // Get the final URL from response (after redirects)
     // In Deno, response.url contains the final URL after redirects
-    const finalUrl = response.url || shortUrl;
+    let finalUrl = response.url || shortUrl;
+
+    // If response.url is not available or same as shortUrl, try to extract from Location header or HTML
+    if (finalUrl === shortUrl) {
+      // Check for redirect in Location header
+      const location = response.headers.get("location");
+      if (location) {
+        finalUrl = location.startsWith("http") ? location : new URL(location, shortUrl).href;
+      }
+    }
 
     // Try to detect event type from URL pattern
     const eventType = detectEventType(finalUrl);
@@ -151,52 +160,129 @@ export async function checkEventUrl(shortUrl: string): Promise<{ url: string; ty
 
 /**
  * Parses GMT date string to timestamp
- * Format: "Wednesday, 31 December 2025 at 15:00 GMT"
+ * Handles various formats:
+ * - "Wednesday, 31 December 2025 at 15:00 GMT"
+ * - "Monday, February 2, 2026 at 8:00 (GMT)"
+ * - "31 December 2025 at 15:00 GMT"
+ * - Variations with extra spaces, punctuation, etc.
  */
 function parseGmtDate(dateStr: string): number | null {
   try {
-    // Ensure we have "GMT" at the end
-    if (!dateStr.includes("GMT")) {
-      return null;
+    // Normalize the string - remove GMT markers and clean up
+    let cleaned = dateStr.trim();
+
+    // Remove GMT or (GMT) markers and everything after them
+    cleaned = cleaned.replace(/\s*\(?GMT\)?.*$/i, "").trim();
+
+    // Normalize "at" separator - handle variations with spaces
+    cleaned = cleaned.replace(/\s+at\s+/i, " ").trim();
+
+    // Try multiple regex patterns to extract date components
+    // Order matters - more specific patterns first
+    let day: number | null = null;
+    let monthName: string | null = null;
+    let year: number | null = null;
+    let hour: number | null = null;
+    let minute: number | null = null;
+    let match: RegExpMatchArray | null = null;
+
+    // Pattern 1: "Monday, February 2, 2026 8:00" (day name, month name, day with comma)
+    match = cleaned.match(/^[A-Za-z]+,?\s+([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+    if (match) {
+      monthName = match[1];
+      day = parseInt(match[2], 10);
+      year = parseInt(match[3], 10);
+      hour = parseInt(match[4], 10);
+      minute = parseInt(match[5], 10);
     }
 
-    // Extract the date part before "GMT"
-    const datePart = dateStr.replace(/\s+GMT.*$/i, "").trim();
-
-    // Parse date string like "Wednesday, 31 December 2025 at 15:00"
-    // Remove day name (everything before first comma) and "at"
-    const cleaned = datePart.replace(/^[^,]+,?\s*/, "").replace(/\s+at\s+/, " ");
-
-    // Parse: "31 December 2025 15:00"
-    // Extract components: day, month name, year, hour, minute
-    const match = cleaned.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+    // Pattern 2: "Monday, 31 December 2025 15:00" (day name, day number, month name)
     if (!match) {
+      match = cleaned.match(/^[A-Za-z]+,?\s+(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+      if (match) {
+        day = parseInt(match[1], 10);
+        monthName = match[2];
+        year = parseInt(match[3], 10);
+        hour = parseInt(match[4], 10);
+        minute = parseInt(match[5], 10);
+      }
+    }
+
+    // Pattern 3: "February 2, 2026 8:00" (month name, day with comma, no day name)
+    if (!match) {
+      match = cleaned.match(/^([A-Za-z]+)\s+(\d{1,2}),\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+      if (match) {
+        monthName = match[1];
+        day = parseInt(match[2], 10);
+        year = parseInt(match[3], 10);
+        hour = parseInt(match[4], 10);
+        minute = parseInt(match[5], 10);
+      }
+    }
+
+    // Pattern 4: "31 December 2025 15:00" (day number, month name, no day name)
+    if (!match) {
+      match = cleaned.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+      if (match) {
+        day = parseInt(match[1], 10);
+        monthName = match[2];
+        year = parseInt(match[3], 10);
+        hour = parseInt(match[4], 10);
+        minute = parseInt(match[5], 10);
+      }
+    }
+
+    // Pattern 5: "February 2 2026 8:00" (month name, day without comma, no day name) - fallback
+    if (!match) {
+      match = cleaned.match(/^([A-Za-z]+)\s+(\d{1,2})\s+(\d{4})\s+(\d{1,2}):(\d{2})/);
+      if (match) {
+        monthName = match[1];
+        day = parseInt(match[2], 10);
+        year = parseInt(match[3], 10);
+        hour = parseInt(match[4], 10);
+        minute = parseInt(match[5], 10);
+      }
+    }
+
+    if (!match || day === null || monthName === null || year === null || hour === null || minute === null) {
       return null;
     }
 
-    const day = parseInt(match[1], 10);
-    const monthName = match[2];
-    const year = parseInt(match[3], 10);
-    const hour = parseInt(match[4], 10);
-    const minute = parseInt(match[5], 10);
+    // Month name mapping (handles full names and abbreviations)
+    const monthMap: Record<string, number> = {
+      january: 0,
+      jan: 0,
+      february: 1,
+      feb: 1,
+      march: 2,
+      mar: 2,
+      april: 3,
+      apr: 3,
+      may: 4,
+      june: 5,
+      jun: 5,
+      july: 6,
+      jul: 6,
+      august: 7,
+      aug: 7,
+      september: 8,
+      sep: 8,
+      sept: 8,
+      october: 9,
+      oct: 9,
+      november: 10,
+      nov: 10,
+      december: 11,
+      dec: 11,
+    };
 
-    // Convert month name to number (0-indexed)
-    const monthNames = [
-      "january",
-      "february",
-      "march",
-      "april",
-      "may",
-      "june",
-      "july",
-      "august",
-      "september",
-      "october",
-      "november",
-      "december",
-    ];
-    const month = monthNames.indexOf(monthName.toLowerCase());
-    if (month === -1) {
+    const monthLower = monthName.toLowerCase().replace(/\./g, ""); // Remove dots
+    const month = monthMap[monthLower];
+    if (month === undefined) {
+      return null;
+    }
+
+    if (isNaN(day) || isNaN(year) || isNaN(hour) || isNaN(minute)) {
       return null;
     }
 
@@ -255,7 +341,8 @@ export async function parseEventTimeframe(
     // Parse based on event type
     if (eventType === "Moogle Treasure Trove") {
       // Format: "Event Schedule / From Tuesday, 8 July 2025 at 8:00 GMT (18:00 AEST) to the release of Patch 7.3"
-      const dateMatch = content.match(/From\s+(.+?)\s+GMT/i);
+      // Also handles "(GMT)" format
+      const dateMatch = content.match(/From\s+(.+?)\s+\(?GMT\)?/i);
       if (!dateMatch || dateMatch.length < 2) {
         return null;
       }
@@ -275,13 +362,27 @@ export async function parseEventTimeframe(
       };
     } else {
       // Special Event format: "Event Schedule / From Wednesday, 31 December 2025 at 15:00 GMT ... to Thursday, 15 January 2026 at 14:59 GMT"
-      const dateMatch = content.match(/From\s+(.+?)\s+GMT.*?\s+to\s+(.+?)\s+GMT/i);
+      // Also handles "(GMT)" format: "From Monday, February 2, 2026 at 8:00 (GMT) ... to Monday, February 16, 2026 at 14:59 (GMT)"
+      // More flexible regex to handle variations in spacing and format
+      // Match from date up to GMT marker, then anything until "to", then to date (may not have GMT marker at end)
+      const dateMatch = content.match(/From\s+(.+?)\s+\(?GMT\)?.*?\s+to\s+(.+?)(?:\s+\(?GMT\)?|$)/i);
       if (!dateMatch || dateMatch.length < 3) {
         return null;
       }
 
-      const fromStr = dateMatch[1].trim() + " GMT";
-      const toStr = dateMatch[2].trim() + " GMT";
+      // Clean up the extracted date strings - remove any trailing content after time
+      let fromStr = dateMatch[1].trim();
+      let toStr = dateMatch[2].trim();
+
+      // Remove any parenthetical timezone info that might be after the time
+      // For "from" date: remove complete parentheses like "(19:00 AEDT)"
+      fromStr = fromStr.replace(/\s*\([^)]*(?:\([^)]*\)[^)]*)*\)\s*$/, "").trim();
+      // For "to" date: remove everything from first opening paren to end (handles malformed/unclosed parentheses)
+      toStr = toStr.replace(/\s*\(.*$/, "").trim();
+
+      // Ensure we have GMT suffix for parsing
+      fromStr = fromStr + " GMT";
+      toStr = toStr + " GMT";
 
       const fromTimestamp = parseGmtDate(fromStr);
       const toTimestamp = parseGmtDate(toStr);
