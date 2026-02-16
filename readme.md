@@ -15,7 +15,7 @@ docker build -t naagostone .
 The easiest way to run the service:
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 To stop the service:
@@ -53,4 +53,10 @@ Or with watch mode:
 
 ```bash
 deno task dev
+```
+
+With Docker:
+
+```bash
+docker compose -f docker-compose.dev.yml up -d
 ```
