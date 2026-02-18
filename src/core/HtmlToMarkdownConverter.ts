@@ -199,6 +199,13 @@ export class HtmlToMarkdownConverter {
       "",
     );
 
+    text = text.replace(
+      /^(?:On\s+)?(?:From\s+)?(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4}(?:\s+(?:at(?:\s+around)?|from))?\s+\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]\.?m\.?)?(?:\s+(?:to|and)\s+(?:(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+)?(?:\d{1,2}\s+[A-Za-z]{3,9}\.?\s+\d{4}\s+)?(?:at\s+(?:around\s+)?)?\d{1,2}:\d{2}(?::\d{2})?(?:\s*[ap]\.?m\.?)?)?\s*\((?!GMT)[A-Z]{2,5}\)[.,!]?\s*\n?/gm,
+      "",
+    );
+
+    text = text.replace(/(\*\*.+?)\s*\n+\*\*\s*(?=\n|$)/gm, "$1**");
+
     text = text.replace(/\n{3,}/g, "\n\n");
 
     return text;
@@ -488,6 +495,11 @@ export class HtmlToMarkdownConverter {
     workingHtml = workingHtml.replace(
       /<a[^>]*class="news__list--img"[^>]*>.*?<\/a>/gis,
       "",
+    );
+
+    workingHtml = workingHtml.replace(
+      /<a\s[^>]*href=["']([^"']+)["'][^>]*>\s*(<img\s[^>]*src=["']\1["'][^>]*>)\s*<\/a>/gi,
+      "$2",
     );
 
     workingHtml = this.replaceIframesWithLinks(workingHtml);
