@@ -3,18 +3,17 @@ services:
     container_name: naagostone-api
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: naagostone:dev
     networks:
       - naagostone-network
     ports:
-      - "3001:3001"
+      - "${PORT:-3001}:${PORT:-3001}"
     restart: unless-stopped
     environment:
       - DEPLOYMENT_HASH=local-dev
     volumes:
       - .:/app
-      - /app/node_modules
 
 networks:
   naagostone-network:

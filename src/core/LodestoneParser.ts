@@ -1,7 +1,6 @@
 import type { Context } from "hono";
 import type { CssSelectorDefinition } from "../interface/CssSelectorDefinition.ts";
 import type { CssSelectorRegistry } from "../interface/CssSelectorRegistry.ts";
-import * as RegexTranslator from "regex-translator";
 import { Document, DOMParser, Element } from "deno-dom";
 import { StringFormatter } from "./StringFormatter.ts";
 import { type CacheType, lodestoneQueue, RequestPriority } from "./LodestoneRequestQueue.ts";
@@ -168,13 +167,7 @@ export abstract class LodestoneParser {
       res = element.innerHTML || "";
     }
     if (definition.regex) {
-      const mediary = RegexTranslator.getMediaryObjectFromRegexString(
-        definition.regex,
-      );
-      const regex = RegexTranslator.getRegexStringFromMediaryObject(
-        mediary,
-        "ecma",
-      )
+      const regex = definition.regex
         .replace(/\(\?P/gm, "(?")
         .replace(/\\f\\n\\r\\t\\v/gm, "\\s\\f\\n\\r\\t\\v&nbsp;");
       const match = new RegExp(regex).exec(res);

@@ -22,6 +22,8 @@ import { RequestPriority } from "./core/LodestoneRequestQueue.ts";
 import { FreeCompany } from "./parser/freecompany/FreeCompany.ts";
 import { WorldStatus } from "./parser/worldstatus/WorldStatus.ts";
 import { getEventTimeframe as getEventInfo } from "./parser/news/EventTimeframeParser.ts";
+import { openApiSpec, swaggerHtml } from "./documentation/openapi.ts";
+import { DocumentationBuilder } from "./documentation/DocumentationBuilder.ts";
 
 await load({ export: true });
 
@@ -111,69 +113,28 @@ app.get("/", (context: Context) => {
   const deploymentHash = Deno.env.get("DEPLOYMENT_HASH") || "development";
 
   return context.json({
-    name: "FFXIV Lodestone API",
-    deployment: {
-      hash: deploymentHash,
-    },
+    name: "Naagostone - FFXIV Lodestone API",
+    docs: "/docs",
+    deploymentHash,
     endpoints: {
-      character: {
-        search: {
-          method: "GET",
-          path: "/character/search",
-          description: "Search for characters",
-          params: {
-            name: "Character name (query parameter)",
-            worldname: "World name (query parameter)",
-            page: "Page number (query parameter, optional)",
-          },
-        },
-        profile: {
-          method: "GET",
-          path: "/character/:characterId",
-          description: "Get character profile by ID",
-          params: {
-            characterId: "Character ID (path parameter)",
-          },
-        },
-      },
-      lodestone: {
-        topics: {
-          method: "GET",
-          path: "/lodestone/topics",
-          description: "Get topics with details. Possible event types: 'Special Event' | 'Moogle Treasure Trove'",
-        },
-        notices: {
-          method: "GET",
-          path: "/lodestone/notices",
-          description: "Get notices with details",
-        },
-        maintenance: {
-          method: "GET",
-          path: "/lodestone/maintenances",
-          description: "Get maintenances with details",
-        },
-        updates: {
-          method: "GET",
-          path: "/lodestone/updates",
-          description: "Get updates with details",
-        },
-        status: {
-          method: "GET",
-          path: "/lodestone/statuses",
-          description: "Get statuses with details",
-        },
-        worldstatus: {
-          method: "GET",
-          path: "/lodestone/worldstatus",
-          description: "Get world status for all data centers",
-        },
-      },
+      characters: DocumentationBuilder.buildCharactersDocumentation(),
+      worlds: DocumentationBuilder.buildWorldsDocumentation(),
+      worldstatus: DocumentationBuilder.buildWorldStatusDocumentation(),
+      news: DocumentationBuilder.buildNewsDocumentation(),
     },
   });
 });
 
 app.get("/favicon.ico", (context: Context) => {
   return context.body(null, 204);
+});
+
+app.get("/openapi.json", (context: Context) => {
+  return context.json(openApiSpec);
+});
+
+app.get("/docs", (context: Context) => {
+  return context.html(swaggerHtml("/openapi.json"));
 });
 
 const characterParser = new Character();
@@ -191,8 +152,27 @@ const statusParser = new Status();
 const statusDetailsParser = new StatusDetails();
 const worldStatusParser = new WorldStatus();
 
-app.get("/character/search", async (context: Context) => {
-  const name = context.req.query("name");
+app.get("/characters", async (context: Context) => {
+  const firstname = context.req.query("firstname");
+  const lastname = context.req.query("lastname");
+  const world = context.req.query("world");
+
+  if (!firstname && !lastname && !world) {
+    return context.json({
+      name: "Naagostone - Characters Endpoint",
+      docs: "/docs",
+      characters: DocumentationBuilder.buildCharactersDocumentation(),
+    });
+  }
+
+  if (!firstname || !lastname || !world) {
+    return InputValidator.createValidationError(
+      context,
+      "'firstname', 'lastname' and 'world' query parameters are required.",
+    );
+  }
+
+  const name = `${firstname} ${lastname}`;
   if (!InputValidator.validateCharacterName(name)) {
     return InputValidator.createValidationError(
       context,
@@ -200,11 +180,10 @@ app.get("/character/search", async (context: Context) => {
     );
   }
 
-  const page = context.req.query("page");
-  if (!InputValidator.validatePageNumber(page)) {
+  if (!InputValidator.sanitizeWorldName(world)) {
     return InputValidator.createValidationError(
       context,
-      "Invalid page number. Must be a positive integer.",
+      "Invalid world name. Must contain only letters.",
     );
   }
 
@@ -222,7 +201,7 @@ app.get("/character/search", async (context: Context) => {
   }
 });
 
-app.get("/character/:characterId", async (context: Context) => {
+app.get("/characters/:characterId", async (context: Context) => {
   const characterId = context.req.param("characterId");
   if (!InputValidator.validateCharacterId(characterId)) {
     return InputValidator.createValidationError(
@@ -594,7 +573,15 @@ function parseNumericStrings(parsed: Record<string, unknown>) {
   return parsed;
 }
 
-app.get("/lodestone/topics", async (context: Context) => {
+app.get("/news", (context: Context) => {
+  return context.json({
+    name: "Naagostone - News Endpoint",
+    docs: "/docs",
+    news: DocumentationBuilder.buildNewsDocumentation(),
+  });
+});
+
+app.get("/news/topics", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -663,7 +650,7 @@ app.get("/lodestone/topics", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/notices", async (context: Context) => {
+app.get("/news/notices", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -729,7 +716,7 @@ app.get("/lodestone/notices", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/maintenances", async (context: Context) => {
+app.get("/news/maintenances", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -804,7 +791,7 @@ app.get("/lodestone/maintenances", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/updates", async (context: Context) => {
+app.get("/news/updates", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -858,7 +845,7 @@ app.get("/lodestone/updates", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/statuses", async (context: Context) => {
+app.get("/news/statuses", async (context: Context) => {
   context.header("Cache-Control", "max-age=0");
 
   try {
@@ -914,7 +901,41 @@ app.get("/lodestone/statuses", async (context: Context) => {
   }
 });
 
-app.get("/lodestone/worldstatus", async (context: Context) => {
+app.get("/worlds", async (context: Context) => {
+  context.header("Cache-Control", "max-age=3600");
+
+  try {
+    const { worldStatus } = await worldStatusParser.parse(context);
+
+    const allWorlds: string[] = [];
+    const allDatacenters: string[] = [];
+    const grouped: Record<string, string[]> = {};
+
+    for (const physical of worldStatus) {
+      for (const logical of physical.logicalDataCenters) {
+        allDatacenters.push(logical.logicalDataCenter);
+        const worldNames = logical.worlds.map((w) => w.world);
+        allWorlds.push(...worldNames);
+        grouped[logical.logicalDataCenter] = worldNames;
+      }
+    }
+
+    allWorlds.sort();
+    allDatacenters.sort();
+
+    return context.json({ allWorlds, allDatacenters, grouped });
+  } catch (err: unknown) {
+    const error = err as Error;
+    log.error(`Worlds fetch error: ${error.message}`);
+    if (error.message === "404") {
+      return context.json({ error: "Not found" }, 404);
+    } else if (error.message === "503") {
+      return context.json({ error: "Service unavailable" }, 503);
+    } else return context.json({ error: error.message }, 500);
+  }
+});
+
+app.get("/worldstatus", async (context: Context) => {
   context.header("Cache-Control", "max-age=60");
 
   try {
@@ -942,12 +963,7 @@ try {
     hostname,
     onListen: ({ hostname, port }) => {
       log.debug(`onListen received - hostname: ${hostname}, port: ${port}`);
-      let displayHost = hostname;
-      if (hostname === "0.0.0.0") {
-        displayHost = "localhost";
-      } else if (hostname === "127.0.0.1") {
-        displayHost = "localhost";
-      }
+      const displayHost = (hostname === "0.0.0.0" || hostname === "127.0.0.1") ? "localhost" : hostname;
       log.info(`Server running on http://${displayHost}:${port}`);
     },
     onError: (error: unknown) => {

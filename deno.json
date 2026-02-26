@@ -10,7 +10,6 @@
     "hono": "https://deno.land/x/hono@v4.0.10/mod.ts",
     "hono/middleware": "https://deno.land/x/hono@v4.0.10/middleware.ts",
     "deno-dom": "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts",
-    "regex-translator": "npm:regex-translator@^0.2.7",
     "@std/log": "jsr:@std/log@^0.224.9",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
     "turndown": "npm:turndown@^7.2.0"

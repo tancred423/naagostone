@@ -5,7 +5,7 @@ services:
     networks:
       - naagostone-network
     ports:
-      - "3001:3001"
+      - "${PORT:-3001}:3001"
     restart: unless-stopped
     environment:
       - DEPLOYMENT_HASH=${DEPLOYMENT_HASH:-unknown}

@@ -26,21 +26,23 @@ export abstract class PaginatedPageParser extends PageParser {
     baseParse = baseParse.entry as Record<string, unknown>;
 
     try {
-      const queryName = ctx.req.query("name")?.toString().toLowerCase();
-      if (queryName) {
+      const firstname = ctx.req.query("firstname");
+      const lastname = ctx.req.query("lastname");
+      const fullName = (firstname && lastname) ? `${firstname} ${lastname}`.toLowerCase() : null;
+      if (fullName) {
         baseParse.list = (baseParse.list as Array<Record<string, unknown>>)
           .filter((parses) => {
             const parseName = (parses.name as string)?.toLowerCase();
-            return parseName === queryName;
+            return parseName === fullName;
           });
       }
 
-      const queryWorld = ctx.req.query("worldname")?.toString().toLowerCase();
-      if (queryWorld) {
+      const world = ctx.req.query("world")?.toLowerCase();
+      if (world) {
         baseParse.list = (baseParse.list as Array<Record<string, unknown>>)
           .filter((parses) => {
             const parseWorld = (parses.world as string)?.toLowerCase();
-            return parseWorld === queryWorld;
+            return parseWorld === world;
           });
       }
     } catch (err) {

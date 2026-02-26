@@ -14,12 +14,7 @@ interface SeparatorComponent {
   type: "separator";
 }
 
-interface StreamComponent {
-  type: "stream";
-  url: string;
-}
-
-type DiscordComponent = TextDisplayComponent | MediaGalleryComponent | SeparatorComponent | StreamComponent;
+type DiscordComponent = TextDisplayComponent | MediaGalleryComponent | SeparatorComponent;
 
 interface DiscordComponentsV2 {
   components: DiscordComponent[];
@@ -48,6 +43,7 @@ export class HtmlToMarkdownConverter {
   }
 
   private preprocessHtml(html: string): string {
+    html = html.replace(/<a\s[^>]*>\s*<\/a>/gi, "");
     html = html.replace(/<(h[1-6])[^>]*>\s*<\/\1>/gi, "");
     html = html.replace(/<br\s*\/?>\s*<\/li>/gi, "</li>");
     html = html.replace(/<(strong|em|b|i)>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/\1>/gi, "<$1>$2</$1>");
@@ -526,61 +522,35 @@ export class HtmlToMarkdownConverter {
     link?: string,
   ): void {
     const imgPattern = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi;
-    const streamPattern = /<p>Stream:\s*(https?:\/\/[^\s<]+)<\/p>/gi;
 
     let lastIndex = 0;
     let currentImages: string[] = [];
 
-    const allMatches: Array<{ index: number; length: number; type: "image" | "stream"; data: string }> = [];
+    const allMatches: Array<{ index: number; length: number; data: string }> = [];
 
     let match;
     while ((match = imgPattern.exec(html)) !== null) {
       allMatches.push({
         index: match.index,
         length: match[0].length,
-        type: "image",
         data: match[1],
       });
     }
-
-    while ((match = streamPattern.exec(html)) !== null) {
-      allMatches.push({
-        index: match.index,
-        length: match[0].length,
-        type: "stream",
-        data: match[1],
-      });
-    }
-
-    allMatches.sort((a, b) => a.index - b.index);
 
     for (const item of allMatches) {
-      if (item.type === "image") {
-        const textBetween = html.substring(lastIndex, item.index);
-        const hasTextContent = textBetween.replace(/<[^>]*>/g, "").trim().length > 0;
+      const textBetween = html.substring(lastIndex, item.index);
+      const hasTextContent = textBetween.replace(/<[^>]*>/g, "").trim().length > 0;
 
-        if (currentImages.length === 0) {
-          this.addTextComponent(textBetween, components, link);
-        } else if (hasTextContent) {
-          components.push({ type: "mediaGallery", urls: currentImages });
-          currentImages = [];
-          this.addTextComponent(textBetween, components, link);
-        }
-
-        currentImages.push(item.data);
-        lastIndex = item.index + item.length;
-      } else if (item.type === "stream") {
-        if (currentImages.length > 0) {
-          components.push({ type: "mediaGallery", urls: currentImages });
-          currentImages = [];
-        }
-
-        const textBefore = html.substring(lastIndex, item.index);
-        this.addTextComponent(textBefore, components, link);
-
-        components.push({ type: "stream", url: item.data });
-        lastIndex = item.index + item.length;
+      if (currentImages.length === 0) {
+        this.addTextComponent(textBetween, components, link);
+      } else if (hasTextContent) {
+        components.push({ type: "mediaGallery", urls: currentImages });
+        currentImages = [];
+        this.addTextComponent(textBetween, components, link);
       }
+
+      currentImages.push(item.data);
+      lastIndex = item.index + item.length;
     }
 
     if (currentImages.length > 0) {
@@ -613,6 +583,7 @@ export class HtmlToMarkdownConverter {
   }
 
   private preprocessHtmlForV2(html: string): string {
+    html = html.replace(/<a\s[^>]*>\s*<\/a>/gi, "");
     html = html.replace(/<(h[1-6])[^>]*>\s*<\/\1>/gi, "");
     html = html.replace(/<br\s*\/?>\s*<\/li>/gi, "</li>");
     html = html.replace(/<(strong|em|b|i)>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/\1>/gi, "<$1>$2</$1>");

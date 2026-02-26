@@ -7,16 +7,14 @@ import type { Context } from "hono";
 
 export class CharacterSearch extends PaginatedPageParser {
   protected getBaseURL(ctx: Context): string {
-    const name = ctx.req.query("name");
-    let query = `?q=${name?.toString()?.replace(" ", "+")}`;
+    const firstname = ctx.req.query("firstname");
+    const lastname = ctx.req.query("lastname");
+    const world = ctx.req.query("world");
+    const name = `${firstname} ${lastname}`;
+    let query = `?q=${name.replace(" ", "+")}`;
 
-    const dc = ctx.req.query("dc");
-    const worldname = ctx.req.query("worldname");
-
-    if (dc) {
-      query += `&worldname=_dc_${dc}`;
-    } else if (worldname) {
-      query += `&worldname=${this.formatWorldname(worldname.toString())}`;
+    if (world) {
+      query += `&worldname=${this.formatWorldname(world)}`;
     }
     return `https://eu.finalfantasyxiv.com/lodestone/character/${query}`;
   }

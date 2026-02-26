@@ -58,7 +58,7 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/${{ steps.repo_owner.outputs.owner }}/naagostone:buildcache
           cache-to: type=registry,ref=ghcr.io/${{ steps.repo_owner.outputs.owner }}/naagostone:buildcache,mode=max
 
-      - name: Remove existing docker-compose.prod.yml
+      - name: Remove existing docker-compose.yml
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -66,16 +66,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            rm -f ${{ vars.PROJECT_PATH }}/docker-compose.prod.yml
+            rm -f ${{ vars.PROJECT_PATH }}/docker-compose.yml
 
-      - name: Copy docker-compose.prod.yml to server
+      - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "docker-compose.prod.yml"
+          source: "docker-compose.yml"
           target: "${{ vars.PROJECT_PATH }}"
 
       - name: Deploy to server
@@ -92,13 +92,13 @@ jobs:
             # Login to GitHub Container Registry
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             echo "Stopping existing containers..."
-            docker compose -f docker-compose.prod.yml down --volumes=false || true
+            docker compose down --volumes=false || true
             echo "Pulling latest images..."
-            docker compose -f docker-compose.prod.yml pull
+            docker compose pull
             echo "Starting containers with deployment hash..."
-            DEPLOYMENT_HASH=${{ github.sha }} docker compose -f docker-compose.prod.yml up -d --remove-orphans
+            DEPLOYMENT_HASH=${{ github.sha }} docker compose up -d --remove-orphans
             echo "Checking container status..."
-            docker compose -f docker-compose.prod.yml ps
+            docker compose ps
             echo "Cleaning up old images..."
             docker image prune -af --filter "until=24h" || true
             echo "✅ Deployment completed successfully!"
