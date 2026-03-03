@@ -29,6 +29,12 @@ export class HtmlToMarkdownConverter {
       filter: "hr",
       replacement: () => "\n\n───────────────────────────────\n\n",
     });
+    this.turndownService.addRule("table", {
+      filter: "table",
+      replacement: (_content: string, node: TurndownService.Node) => {
+        return this.convertTableNode(node);
+      },
+    });
   }
 
   convert(html: string, link?: string): string {
@@ -879,5 +885,77 @@ export class HtmlToMarkdownConverter {
       }
     }
     return null;
+  }
+
+  // deno-lint-ignore no-explicit-any
+  private convertTableNode(node: any): string {
+    const trs = node.getElementsByTagName?.("tr");
+    if (!trs || trs.length === 0) return "";
+
+    const spacerColumns = new Set<number>();
+    const firstTr = trs[0];
+    let idx = 0;
+    for (let c = 0; c < firstTr.childNodes.length; c++) {
+      const child = firstTr.childNodes[c];
+      const name = (child.nodeName || "").toUpperCase();
+      if (name === "TH" || name === "TD") {
+        const cls = child.getAttribute?.("class") || "";
+        const width = child.getAttribute?.("width") || "";
+        if (cls.includes("mdl-table__layout--spacer") || width === "1%") {
+          spacerColumns.add(idx);
+        }
+        idx++;
+      }
+    }
+
+    const rows: { cells: string[]; isHeader: boolean }[] = [];
+    for (let r = 0; r < trs.length; r++) {
+      const tr = trs[r];
+      const cells: string[] = [];
+      let isHeader = false;
+      let colIdx = 0;
+
+      for (let c = 0; c < tr.childNodes.length; c++) {
+        const child = tr.childNodes[c];
+        const name = (child.nodeName || "").toUpperCase();
+        if (name === "TH" || name === "TD") {
+          if (!spacerColumns.has(colIdx)) {
+            if (name === "TH") isHeader = true;
+            const text = (child.textContent || "").replace(/\s+/g, " ").trim();
+            cells.push(text);
+          }
+          colIdx++;
+        }
+      }
+
+      if (cells.some((c) => c.length > 0)) {
+        rows.push({ cells, isHeader });
+      }
+    }
+
+    if (rows.length === 0) return "";
+
+    const colCount = Math.max(...rows.map((r) => r.cells.length));
+    for (const row of rows) {
+      while (row.cells.length < colCount) row.cells.push("");
+    }
+
+    const separator = " · ";
+    const lines: string[] = [];
+    const headerIdx = rows.findIndex((r) => r.isHeader);
+
+    if (headerIdx >= 0) {
+      lines.push(rows[headerIdx].cells.map((c) => `**${c}**`).join(separator));
+      for (let r = 0; r < rows.length; r++) {
+        if (r === headerIdx) continue;
+        lines.push(rows[r].cells.join(separator));
+      }
+    } else {
+      for (const row of rows) {
+        lines.push(row.cells.join(separator));
+      }
+    }
+
+    return "\n\n" + lines.join("\n") + "\n\n";
   }
 }
