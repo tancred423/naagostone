@@ -38,7 +38,7 @@ export class HtmlToMarkdownConverter {
   }
 
   convert(html: string, link?: string): string {
-    let processedHtml = this.replaceIframesWithLinks(html);
+    let processedHtml = this.replaceIframesWithLinks(html, { shouldAddYouTubeThumbnails: false });
     processedHtml = this.preprocessHtml(processedHtml);
     let markdown = this.turndownService.turndown(processedHtml);
     markdown = this.cleanupMarkdown(markdown);
@@ -56,15 +56,37 @@ export class HtmlToMarkdownConverter {
     return html;
   }
 
-  private replaceIframesWithLinks(html: string): string {
+  private replaceIframesWithLinks(
+    html: string,
+    options?: { shouldAddYouTubeThumbnails?: boolean },
+  ): string {
+    const shouldAddYouTubeThumbnails = options?.shouldAddYouTubeThumbnails === true;
     return html.replace(
       /<div[^>]*mdl-youtube[^>]*>.*?<iframe[^>]+src=["']([^"']+)["'][^>]*>.*?<\/div>/gis,
       (_match: string, iframeSrc: string) => {
         const cleanUrl = this.extractCleanVideoUrl(iframeSrc);
         const label = this.getVideoPlatformLabel(cleanUrl);
-        return `<p>${label}${cleanUrl}</p>`;
+        let replacement = `<p>${label}${cleanUrl}</p>`;
+        if (shouldAddYouTubeThumbnails) {
+          const ytId = this.extractYoutubeEmbedVideoId(iframeSrc);
+          if (ytId) {
+            replacement += `<img src="https://i3.ytimg.com/vi/${ytId}/maxresdefault.jpg" alt="">`;
+          }
+        }
+        return replacement;
       },
     );
+  }
+
+  private extractYoutubeEmbedVideoId(iframeSrc: string): string | null {
+    if (
+      !iframeSrc.includes("youtube.com/embed/") &&
+      !iframeSrc.includes("youtube-nocookie.com/embed/")
+    ) {
+      return null;
+    }
+    const youtubeMatch = iframeSrc.match(/youtube(?:-nocookie)?\.com\/embed\/([^?&]+)/);
+    return youtubeMatch ? youtubeMatch[1] : null;
   }
 
   private extractCleanVideoUrl(iframeSrc: string): string {
@@ -515,7 +537,7 @@ export class HtmlToMarkdownConverter {
       "$2",
     );
 
-    workingHtml = this.replaceIframesWithLinks(workingHtml);
+    workingHtml = this.replaceIframesWithLinks(workingHtml, { shouldAddYouTubeThumbnails: true });
 
     const parts = workingHtml.split(/<hr\s*\/?>/gi);
 
