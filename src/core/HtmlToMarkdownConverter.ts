@@ -61,7 +61,8 @@ export class HtmlToMarkdownConverter {
       /<div[^>]*mdl-youtube[^>]*>.*?<iframe[^>]+src=["']([^"']+)["'][^>]*>.*?<\/div>/gis,
       (_match: string, iframeSrc: string) => {
         const cleanUrl = this.extractCleanVideoUrl(iframeSrc);
-        return `<p>Stream: ${cleanUrl}</p>`;
+        const label = this.getVideoPlatformLabel(cleanUrl);
+        return `<p>${label}${cleanUrl}</p>`;
       },
     );
   }
@@ -72,13 +73,23 @@ export class HtmlToMarkdownConverter {
       if (videoMatch) {
         return `https://www.twitch.tv/videos/${videoMatch[1]}`;
       }
-    } else if (iframeSrc.includes("youtube.com/embed/")) {
-      const youtubeMatch = iframeSrc.match(/youtube\.com\/embed\/([^?&]+)/);
+    } else if (iframeSrc.includes("youtube.com/embed/") || iframeSrc.includes("youtube-nocookie.com/embed/")) {
+      const youtubeMatch = iframeSrc.match(/youtube(?:-nocookie)?\.com\/embed\/([^?&]+)/);
       if (youtubeMatch) {
         return `https://www.youtube.com/watch?v=${youtubeMatch[1]}`;
       }
     }
     return iframeSrc;
+  }
+
+  private getVideoPlatformLabel(url: string): string {
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      return "YouTube: ";
+    }
+    if (url.includes("twitch.tv")) {
+      return "Twitch: ";
+    }
+    return "";
   }
 
   private cleanupMarkdown(markdown: string): string {
