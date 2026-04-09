@@ -354,7 +354,7 @@ export class HtmlToMarkdownConverter {
     );
 
     markdown = markdown.replace(
-      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?(?:\s+at)?(?:\s+around)?\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*\(GMT\)/gi,
+      /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s+(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+(\d{4}))?(?:\s+(?:at|from))?(?:\s+around)?\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*\(GMT\)/gi,
       (match, _weekday, day, month, year, hour, minute) => {
         const ts = this.parseDateTimeToTimestamp(day, month, year || new Date().getFullYear().toString(), hour, minute);
         if (ts) return `<t:${ts}:F>`;
@@ -625,8 +625,29 @@ export class HtmlToMarkdownConverter {
     html = html.replace(/<a\s[^>]*>\s*<\/a>/gi, "");
     html = html.replace(/<(h[1-6])[^>]*>\s*<\/\1>/gi, "");
     html = html.replace(/<br\s*\/?>\s*<\/li>/gi, "</li>");
+    html = this.convertBrInListItemsToSubList(html);
     html = html.replace(/<(strong|em|b|i)>\s*<p[^>]*>([\s\S]*?)<\/p>\s*<\/\1>/gi, "<$1>$2</$1>");
     return html;
+  }
+
+  private convertBrInListItemsToSubList(html: string): string {
+    return html.replace(/<li\b([^>]*)>([\s\S]*?)<\/li>/gi, (match, attrs, content) => {
+      if (!/<\/span>\s*<br\s*\/?>\s*<span[\s>]/i.test(content)) {
+        return match;
+      }
+
+      const parts = content.split(/(?<=<\/span>)\s*<br\s*\/?>\s*(?=<span[\s>])/i);
+      if (parts.length <= 1) return match;
+
+      const firstPart = parts[0];
+      const subItems = parts.slice(1)
+        .filter((p: string) => p.replace(/<[^>]*>/g, "").trim().length > 0)
+        .map((p: string) => `<li>${p}</li>`)
+        .join("");
+
+      if (!subItems) return match;
+      return `<li${attrs}>${firstPart}<ul>${subItems}</ul></li>`;
+    });
   }
 
   private cleanupMarkdownForComponents(markdown: string): string {
@@ -646,7 +667,7 @@ export class HtmlToMarkdownConverter {
 
     markdown = markdown.replace(/\*\*\s*\n+([A-Za-z][^\n]{0,50})\n+\*\*/g, "**$1**");
     markdown = markdown.replace(/(\*\s+[^\n]+)\n\n+(\*\s+)/g, "$1\n$2");
-    markdown = markdown.replace(/[ \t]+$/gm, (match) => match.length >= 2 ? "  " : "");
+    markdown = markdown.replace(/[ \t]+$/gm, "");
     markdown = markdown.replace(/\n\n+/g, "\n\n");
     markdown = markdown.replace(/^・/gm, "* ");
     markdown = markdown.replace(/^■\s*/gm, "* ");
