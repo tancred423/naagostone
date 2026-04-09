@@ -646,7 +646,7 @@ export class HtmlToMarkdownConverter {
 
     markdown = markdown.replace(/\*\*\s*\n+([A-Za-z][^\n]{0,50})\n+\*\*/g, "**$1**");
     markdown = markdown.replace(/(\*\s+[^\n]+)\n\n+(\*\s+)/g, "$1\n$2");
-    markdown = markdown.replace(/[ \t]+$/gm, "");
+    markdown = markdown.replace(/[ \t]+$/gm, (match) => match.length >= 2 ? "  " : "");
     markdown = markdown.replace(/\n\n+/g, "\n\n");
     markdown = markdown.replace(/^・/gm, "* ");
     markdown = markdown.replace(/^■\s*/gm, "* ");
