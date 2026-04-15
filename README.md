@@ -1,3 +1,7 @@
+> **Archived**
+>
+> Moved to https://gitlab.com/team-naago/naagostone
+
 # Naagostone
 
 A self-hosted REST API for [FFXIV's Lodestone](https://eu.finalfantasyxiv.com/lodestone/) — look up characters, search
